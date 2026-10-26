@@ -1,0 +1,959 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bookstore Sales Dashboard</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0/dist/css/tabler.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+  <style>
+    .kpi-icon { font-size: 1.5rem; }
+    .buyer-ids { font-size: 1.1rem; word-break: break-word; }
+    .chart-box { min-height: 360px; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="navbar navbar-expand-md d-print-none">
+      <div class="container-xl">
+        <span class="navbar-brand">
+          <i class="ti ti-chart-bar me-2 text-primary"></i>
+          Bookstore Sales Dashboard
+        </span>
+        <div class="navbar-nav flex-row order-md-last">
+          <span class="text-secondary small">Data refreshed: 2026-10-26 23:02</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="page-wrapper">
+      <div class="page-header d-print-none">
+        <div class="container-xl">
+          <div class="row g-2 align-items-center">
+            <div class="col">
+              <div class="page-pretitle">Overview</div>
+              <h2 class="page-title">Sales performance by store</h2>
+            </div>
+          </div>
+          <ul class="nav nav-tabs mt-3" role="tablist">
+            
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active"
+                      data-bs-toggle="tab"
+                      data-bs-target="#tab-STORE1"
+                      data-store="STORE1"
+                      type="button" role="tab">
+                <i class="ti ti-building-store me-2"></i>STORE1
+              </button>
+            </li>
+            
+            <li class="nav-item" role="presentation">
+              <button class="nav-link "
+                      data-bs-toggle="tab"
+                      data-bs-target="#tab-STORE2"
+                      data-store="STORE2"
+                      type="button" role="tab">
+                <i class="ti ti-building-store me-2"></i>STORE2
+              </button>
+            </li>
+            
+            <li class="nav-item" role="presentation">
+              <button class="nav-link "
+                      data-bs-toggle="tab"
+                      data-bs-target="#tab-STORE3"
+                      data-store="STORE3"
+                      type="button" role="tab">
+                <i class="ti ti-building-store me-2"></i>STORE3
+              </button>
+            </li>
+            
+            <li class="nav-item" role="presentation">
+              <button class="nav-link "
+                      data-bs-toggle="tab"
+                      data-bs-target="#tab-STORE4"
+                      data-store="STORE4"
+                      type="button" role="tab">
+                <i class="ti ti-building-store me-2"></i>STORE4
+              </button>
+            </li>
+            
+            <li class="nav-item" role="presentation">
+              <button class="nav-link "
+                      data-bs-toggle="tab"
+                      data-bs-target="#tab-STORE5"
+                      data-store="STORE5"
+                      type="button" role="tab">
+                <i class="ti ti-building-store me-2"></i>STORE5
+              </button>
+            </li>
+            
+          </ul>
+        </div>
+      </div>
+
+      <div class="page-body">
+        <div class="container-xl">
+          <div class="tab-content">
+            
+            <div class="tab-pane fade show active" id="tab-STORE1" role="tabpanel">
+
+              <div class="row row-deck row-cards mb-3">
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body d-flex align-items-center">
+                      <span class="bg-primary text-white avatar me-3"><i class="ti ti-currency-dollar kpi-icon"></i></span>
+                      <div>
+                        <div class="text-secondary">Total revenue</div>
+                        <div class="h2 mb-0">$739,354.03</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body d-flex align-items-center">
+                      <span class="bg-azure text-white avatar me-3"><i class="ti ti-shopping-cart kpi-icon"></i></span>
+                      <div>
+                        <div class="text-secondary">Orders</div>
+                        <div class="h2 mb-0">10,493</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body d-flex align-items-center">
+                      <span class="bg-green text-white avatar me-3"><i class="ti ti-users kpi-icon"></i></span>
+                      <div>
+                        <div class="text-secondary">Unique users</div>
+                        <div class="h2 mb-0">3,221</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body d-flex align-items-center">
+                      <span class="bg-orange text-white avatar me-3"><i class="ti ti-books kpi-icon"></i></span>
+                      <div>
+                        <div class="text-secondary">Unique sets of authors</div>
+                        <div class="h2 mb-0">324</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row row-deck row-cards mb-3">
+                <div class="col-lg-8">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title"><i class="ti ti-chart-line me-2"></i>Daily revenue (USD)</h3>
+                    </div>
+                    <div class="card-body">
+                      <div id="chart-STORE1" class="chart-box"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title"><i class="ti ti-trophy me-2"></i>Top 5 days by revenue</h3>
+                    </div>
+                    <div class="table-responsive">
+                      <table class="table card-table table-vcenter">
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Date</th>
+                            <th class="text-end">Revenue</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          
+                          <tr>
+                            <td><span class="badge bg-yellow text-yellow-fg">1</span></td>
+                            <td class="font-monospace">2025-08-20</td>
+                            <td class="text-end fw-bold">$3,719.35</td>
+                          </tr>
+                          
+                          <tr>
+                            <td><span class="badge bg-secondary-lt">2</span></td>
+                            <td class="font-monospace">2025-09-22</td>
+                            <td class="text-end fw-bold">$3,587.94</td>
+                          </tr>
+                          
+                          <tr>
+                            <td><span class="badge bg-secondary-lt">3</span></td>
+                            <td class="font-monospace">2026-01-15</td>
+                            <td class="text-end fw-bold">$3,307.38</td>
+                          </tr>
+                          
+                          <tr>
+                            <td><span class="badge bg-secondary-lt">4</span></td>
+                            <td class="font-monospace">2025-09-03</td>
+                            <td class="text-end fw-bold">$3,263.25</td>
+                          </tr>
+                          
+                          <tr>
+                            <td><span class="badge bg-secondary-lt">5</span></td>
+                            <td class="font-monospace">2025-10-17</td>
+                            <td class="text-end fw-bold">$3,252.32</td>
+                          </tr>
+                          
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row row-deck row-cards">
+                <div class="col-lg-6">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title"><i class="ti ti-feather me-2"></i>Most popular author(s)</h3>
+                    </div>
+                    <div class="card-body">
+                      
+                      <div class="mb-2">
+                        
+                        <span class="badge bg-blue-lt fs-4 me-1 mb-1"><i class="ti ti-user me-1"></i>Darron Ernser</span>
+                        
+                        <span class="badge bg-blue-lt fs-4 me-1 mb-1"><i class="ti ti-user me-1"></i>Miss Lorina Kertzmann</span>
+                        
+                      </div>
+                      <div class="text-secondary">
+                        173 books sold
+                        (written together)
+                      </div>
+                      
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title"><i class="ti ti-crown me-2"></i>Best buyer (with aliases)</h3>
+                    </div>
+                    <div class="card-body">
+                      <div class="text-secondary mb-1">User IDs</div>
+                      <code class="buyer-ids">[48403, 48904, 50056]</code>
+                      <div class="row mt-3">
+                        <div class="col">
+                          <div class="text-secondary">Total spent</div>
+                          <div class="h3 mb-0">$1,317.59</div>
+                        </div>
+                        <div class="col">
+                          <div class="text-secondary">Linked accounts</div>
+                          <div class="h3 mb-0">3</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            
+            <div class="tab-pane fade " id="tab-STORE2" role="tabpanel">
+
+              <div class="row row-deck row-cards mb-3">
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body d-flex align-items-center">
+                      <span class="bg-primary text-white avatar me-3"><i class="ti ti-currency-dollar kpi-icon"></i></span>
+                      <div>
+                        <div class="text-secondary">Total revenue</div>
+                        <div class="h2 mb-0">$668,103.84</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body d-flex align-items-center">
+                      <span class="bg-azure text-white avatar me-3"><i class="ti ti-shopping-cart kpi-icon"></i></span>
+                      <div>
+                        <div class="text-secondary">Orders</div>
+                        <div class="h2 mb-0">9,181</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body d-flex align-items-center">
+                      <span class="bg-green text-white avatar me-3"><i class="ti ti-users kpi-icon"></i></span>
+                      <div>
+                        <div class="text-secondary">Unique users</div>
+                        <div class="h2 mb-0">3,166</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body d-flex align-items-center">
+                      <span class="bg-orange text-white avatar me-3"><i class="ti ti-books kpi-icon"></i></span>
+                      <div>
+                        <div class="text-secondary">Unique sets of authors</div>
+                        <div class="h2 mb-0">281</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row row-deck row-cards mb-3">
+                <div class="col-lg-8">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title"><i class="ti ti-chart-line me-2"></i>Daily revenue (USD)</h3>
+                    </div>
+                    <div class="card-body">
+                      <div id="chart-STORE2" class="chart-box"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title"><i class="ti ti-trophy me-2"></i>Top 5 days by revenue</h3>
+                    </div>
+                    <div class="table-responsive">
+                      <table class="table card-table table-vcenter">
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Date</th>
+                            <th class="text-end">Revenue</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          
+                          <tr>
+                            <td><span class="badge bg-yellow text-yellow-fg">1</span></td>
+                            <td class="font-monospace">2025-11-16</td>
+                            <td class="text-end fw-bold">$3,789.61</td>
+                          </tr>
+                          
+                          <tr>
+                            <td><span class="badge bg-secondary-lt">2</span></td>
+                            <td class="font-monospace">2025-12-12</td>
+                            <td class="text-end fw-bold">$3,127.15</td>
+                          </tr>
+                          
+                          <tr>
+                            <td><span class="badge bg-secondary-lt">3</span></td>
+                            <td class="font-monospace">2025-12-10</td>
+                            <td class="text-end fw-bold">$3,024.53</td>
+                          </tr>
+                          
+                          <tr>
+                            <td><span class="badge bg-secondary-lt">4</span></td>
+                            <td class="font-monospace">2025-09-19</td>
+                            <td class="text-end fw-bold">$2,938.86</td>
+                          </tr>
+                          
+                          <tr>
+                            <td><span class="badge bg-secondary-lt">5</span></td>
+                            <td class="font-monospace">2025-11-19</td>
+                            <td class="text-end fw-bold">$2,915.20</td>
+                          </tr>
+                          
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row row-deck row-cards">
+                <div class="col-lg-6">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title"><i class="ti ti-feather me-2"></i>Most popular author(s)</h3>
+                    </div>
+                    <div class="card-body">
+                      
+                      <div class="mb-2">
+                        
+                        <span class="badge bg-blue-lt fs-4 me-1 mb-1"><i class="ti ti-user me-1"></i>Kenneth Hamill</span>
+                        
+                        <span class="badge bg-blue-lt fs-4 me-1 mb-1"><i class="ti ti-user me-1"></i>Marcus McKenzie</span>
+                        
+                      </div>
+                      <div class="text-secondary">
+                        176 books sold
+                        (written together)
+                      </div>
+                      
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title"><i class="ti ti-crown me-2"></i>Best buyer (with aliases)</h3>
+                    </div>
+                    <div class="card-body">
+                      <div class="text-secondary mb-1">User IDs</div>
+                      <code class="buyer-ids">[51014]</code>
+                      <div class="row mt-3">
+                        <div class="col">
+                          <div class="text-secondary">Total spent</div>
+                          <div class="h3 mb-0">$1,131.07</div>
+                        </div>
+                        <div class="col">
+                          <div class="text-secondary">Linked accounts</div>
+                          <div class="h3 mb-0">1</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            
+            <div class="tab-pane fade " id="tab-STORE3" role="tabpanel">
+
+              <div class="row row-deck row-cards mb-3">
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body d-flex align-items-center">
+                      <span class="bg-primary text-white avatar me-3"><i class="ti ti-currency-dollar kpi-icon"></i></span>
+                      <div>
+                        <div class="text-secondary">Total revenue</div>
+                        <div class="h2 mb-0">$681,626.00</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body d-flex align-items-center">
+                      <span class="bg-azure text-white avatar me-3"><i class="ti ti-shopping-cart kpi-icon"></i></span>
+                      <div>
+                        <div class="text-secondary">Orders</div>
+                        <div class="h2 mb-0">9,280</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body d-flex align-items-center">
+                      <span class="bg-green text-white avatar me-3"><i class="ti ti-users kpi-icon"></i></span>
+                      <div>
+                        <div class="text-secondary">Unique users</div>
+                        <div class="h2 mb-0">2,955</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body d-flex align-items-center">
+                      <span class="bg-orange text-white avatar me-3"><i class="ti ti-books kpi-icon"></i></span>
+                      <div>
+                        <div class="text-secondary">Unique sets of authors</div>
+                        <div class="h2 mb-0">307</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row row-deck row-cards mb-3">
+                <div class="col-lg-8">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title"><i class="ti ti-chart-line me-2"></i>Daily revenue (USD)</h3>
+                    </div>
+                    <div class="card-body">
+                      <div id="chart-STORE3" class="chart-box"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title"><i class="ti ti-trophy me-2"></i>Top 5 days by revenue</h3>
+                    </div>
+                    <div class="table-responsive">
+                      <table class="table card-table table-vcenter">
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Date</th>
+                            <th class="text-end">Revenue</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          
+                          <tr>
+                            <td><span class="badge bg-yellow text-yellow-fg">1</span></td>
+                            <td class="font-monospace">2025-10-09</td>
+                            <td class="text-end fw-bold">$3,551.19</td>
+                          </tr>
+                          
+                          <tr>
+                            <td><span class="badge bg-secondary-lt">2</span></td>
+                            <td class="font-monospace">2025-09-21</td>
+                            <td class="text-end fw-bold">$3,243.00</td>
+                          </tr>
+                          
+                          <tr>
+                            <td><span class="badge bg-secondary-lt">3</span></td>
+                            <td class="font-monospace">2025-09-04</td>
+                            <td class="text-end fw-bold">$3,041.39</td>
+                          </tr>
+                          
+                          <tr>
+                            <td><span class="badge bg-secondary-lt">4</span></td>
+                            <td class="font-monospace">2025-09-30</td>
+                            <td class="text-end fw-bold">$3,017.60</td>
+                          </tr>
+                          
+                          <tr>
+                            <td><span class="badge bg-secondary-lt">5</span></td>
+                            <td class="font-monospace">2025-09-01</td>
+                            <td class="text-end fw-bold">$2,937.43</td>
+                          </tr>
+                          
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row row-deck row-cards">
+                <div class="col-lg-6">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title"><i class="ti ti-feather me-2"></i>Most popular author(s)</h3>
+                    </div>
+                    <div class="card-body">
+                      
+                      <div class="mb-2">
+                        
+                        <span class="badge bg-blue-lt fs-4 me-1 mb-1"><i class="ti ti-user me-1"></i>Loreta Metz</span>
+                        
+                      </div>
+                      <div class="text-secondary">
+                        155 books sold
+                        
+                      </div>
+                      
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title"><i class="ti ti-crown me-2"></i>Best buyer (with aliases)</h3>
+                    </div>
+                    <div class="card-body">
+                      <div class="text-secondary mb-1">User IDs</div>
+                      <code class="buyer-ids">[52881, 53869, 54846]</code>
+                      <div class="row mt-3">
+                        <div class="col">
+                          <div class="text-secondary">Total spent</div>
+                          <div class="h3 mb-0">$1,398.66</div>
+                        </div>
+                        <div class="col">
+                          <div class="text-secondary">Linked accounts</div>
+                          <div class="h3 mb-0">3</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            
+            <div class="tab-pane fade " id="tab-STORE4" role="tabpanel">
+
+              <div class="row row-deck row-cards mb-3">
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body d-flex align-items-center">
+                      <span class="bg-primary text-white avatar me-3"><i class="ti ti-currency-dollar kpi-icon"></i></span>
+                      <div>
+                        <div class="text-secondary">Total revenue</div>
+                        <div class="h2 mb-0">$778,289.82</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body d-flex align-items-center">
+                      <span class="bg-azure text-white avatar me-3"><i class="ti ti-shopping-cart kpi-icon"></i></span>
+                      <div>
+                        <div class="text-secondary">Orders</div>
+                        <div class="h2 mb-0">10,877</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body d-flex align-items-center">
+                      <span class="bg-green text-white avatar me-3"><i class="ti ti-users kpi-icon"></i></span>
+                      <div>
+                        <div class="text-secondary">Unique users</div>
+                        <div class="h2 mb-0">2,850</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body d-flex align-items-center">
+                      <span class="bg-orange text-white avatar me-3"><i class="ti ti-books kpi-icon"></i></span>
+                      <div>
+                        <div class="text-secondary">Unique sets of authors</div>
+                        <div class="h2 mb-0">299</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row row-deck row-cards mb-3">
+                <div class="col-lg-8">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title"><i class="ti ti-chart-line me-2"></i>Daily revenue (USD)</h3>
+                    </div>
+                    <div class="card-body">
+                      <div id="chart-STORE4" class="chart-box"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title"><i class="ti ti-trophy me-2"></i>Top 5 days by revenue</h3>
+                    </div>
+                    <div class="table-responsive">
+                      <table class="table card-table table-vcenter">
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Date</th>
+                            <th class="text-end">Revenue</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          
+                          <tr>
+                            <td><span class="badge bg-yellow text-yellow-fg">1</span></td>
+                            <td class="font-monospace">2025-11-24</td>
+                            <td class="text-end fw-bold">$4,372.47</td>
+                          </tr>
+                          
+                          <tr>
+                            <td><span class="badge bg-secondary-lt">2</span></td>
+                            <td class="font-monospace">2025-11-17</td>
+                            <td class="text-end fw-bold">$3,818.30</td>
+                          </tr>
+                          
+                          <tr>
+                            <td><span class="badge bg-secondary-lt">3</span></td>
+                            <td class="font-monospace">2025-11-28</td>
+                            <td class="text-end fw-bold">$3,444.83</td>
+                          </tr>
+                          
+                          <tr>
+                            <td><span class="badge bg-secondary-lt">4</span></td>
+                            <td class="font-monospace">2025-11-13</td>
+                            <td class="text-end fw-bold">$3,401.08</td>
+                          </tr>
+                          
+                          <tr>
+                            <td><span class="badge bg-secondary-lt">5</span></td>
+                            <td class="font-monospace">2025-09-21</td>
+                            <td class="text-end fw-bold">$3,303.44</td>
+                          </tr>
+                          
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row row-deck row-cards">
+                <div class="col-lg-6">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title"><i class="ti ti-feather me-2"></i>Most popular author(s)</h3>
+                    </div>
+                    <div class="card-body">
+                      
+                      <div class="mb-2">
+                        
+                        <span class="badge bg-blue-lt fs-4 me-1 mb-1"><i class="ti ti-user me-1"></i>Emil Rempel</span>
+                        
+                        <span class="badge bg-blue-lt fs-4 me-1 mb-1"><i class="ti ti-user me-1"></i>Heriberto Kutch</span>
+                        
+                        <span class="badge bg-blue-lt fs-4 me-1 mb-1"><i class="ti ti-user me-1"></i>Merle Rice</span>
+                        
+                      </div>
+                      <div class="text-secondary">
+                        198 books sold
+                        (written together)
+                      </div>
+                      
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title"><i class="ti ti-crown me-2"></i>Best buyer (with aliases)</h3>
+                    </div>
+                    <div class="card-body">
+                      <div class="text-secondary mb-1">User IDs</div>
+                      <code class="buyer-ids">[53347, 54809]</code>
+                      <div class="row mt-3">
+                        <div class="col">
+                          <div class="text-secondary">Total spent</div>
+                          <div class="h3 mb-0">$1,265.65</div>
+                        </div>
+                        <div class="col">
+                          <div class="text-secondary">Linked accounts</div>
+                          <div class="h3 mb-0">2</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            
+            <div class="tab-pane fade " id="tab-STORE5" role="tabpanel">
+
+              <div class="row row-deck row-cards mb-3">
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body d-flex align-items-center">
+                      <span class="bg-primary text-white avatar me-3"><i class="ti ti-currency-dollar kpi-icon"></i></span>
+                      <div>
+                        <div class="text-secondary">Total revenue</div>
+                        <div class="h2 mb-0">$704,422.31</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body d-flex align-items-center">
+                      <span class="bg-azure text-white avatar me-3"><i class="ti ti-shopping-cart kpi-icon"></i></span>
+                      <div>
+                        <div class="text-secondary">Orders</div>
+                        <div class="h2 mb-0">9,714</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body d-flex align-items-center">
+                      <span class="bg-green text-white avatar me-3"><i class="ti ti-users kpi-icon"></i></span>
+                      <div>
+                        <div class="text-secondary">Unique users</div>
+                        <div class="h2 mb-0">2,987</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body d-flex align-items-center">
+                      <span class="bg-orange text-white avatar me-3"><i class="ti ti-books kpi-icon"></i></span>
+                      <div>
+                        <div class="text-secondary">Unique sets of authors</div>
+                        <div class="h2 mb-0">311</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row row-deck row-cards mb-3">
+                <div class="col-lg-8">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title"><i class="ti ti-chart-line me-2"></i>Daily revenue (USD)</h3>
+                    </div>
+                    <div class="card-body">
+                      <div id="chart-STORE5" class="chart-box"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title"><i class="ti ti-trophy me-2"></i>Top 5 days by revenue</h3>
+                    </div>
+                    <div class="table-responsive">
+                      <table class="table card-table table-vcenter">
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Date</th>
+                            <th class="text-end">Revenue</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          
+                          <tr>
+                            <td><span class="badge bg-yellow text-yellow-fg">1</span></td>
+                            <td class="font-monospace">2025-10-20</td>
+                            <td class="text-end fw-bold">$3,491.85</td>
+                          </tr>
+                          
+                          <tr>
+                            <td><span class="badge bg-secondary-lt">2</span></td>
+                            <td class="font-monospace">2025-11-28</td>
+                            <td class="text-end fw-bold">$3,268.26</td>
+                          </tr>
+                          
+                          <tr>
+                            <td><span class="badge bg-secondary-lt">3</span></td>
+                            <td class="font-monospace">2025-09-27</td>
+                            <td class="text-end fw-bold">$3,190.50</td>
+                          </tr>
+                          
+                          <tr>
+                            <td><span class="badge bg-secondary-lt">4</span></td>
+                            <td class="font-monospace">2025-10-17</td>
+                            <td class="text-end fw-bold">$3,165.18</td>
+                          </tr>
+                          
+                          <tr>
+                            <td><span class="badge bg-secondary-lt">5</span></td>
+                            <td class="font-monospace">2025-12-05</td>
+                            <td class="text-end fw-bold">$3,121.92</td>
+                          </tr>
+                          
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row row-deck row-cards">
+                <div class="col-lg-6">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title"><i class="ti ti-feather me-2"></i>Most popular author(s)</h3>
+                    </div>
+                    <div class="card-body">
+                      
+                      <div class="mb-2">
+                        
+                        <span class="badge bg-blue-lt fs-4 me-1 mb-1"><i class="ti ti-user me-1"></i>Dulcie Bode</span>
+                        
+                      </div>
+                      <div class="text-secondary">
+                        169 books sold
+                        
+                      </div>
+                      
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title"><i class="ti ti-crown me-2"></i>Best buyer (with aliases)</h3>
+                    </div>
+                    <div class="card-body">
+                      <div class="text-secondary mb-1">User IDs</div>
+                      <code class="buyer-ids">[52895, 53969]</code>
+                      <div class="row mt-3">
+                        <div class="col">
+                          <div class="text-secondary">Total spent</div>
+                          <div class="h3 mb-0">$1,365.92</div>
+                        </div>
+                        <div class="col">
+                          <div class="text-secondary">Linked accounts</div>
+                          <div class="h3 mb-0">2</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+      <footer class="footer footer-transparent d-print-none">
+        <div class="container-xl text-secondary small">
+          Prices converted to USD (1 EUR = 1.2 USD). Built with Python, pandas, DuckDB, Tabler and ApexCharts.
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0/dist/js/tabler.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.54.0/dist/apexcharts.min.js"></script>
+  <script>
+    const revenueByStore = {"STORE1": [["2024-11-26", 32.75], ["2024-11-29", 92.4], ["2024-11-30", 38.0], ["2024-12-01", 17.5], ["2024-12-02", 25.98], ["2024-12-05", 50.25], ["2024-12-12", 64.25], ["2024-12-13", 89.97], ["2024-12-15", 63.0], ["2024-12-16", 47.4], ["2024-12-17", 26.4], ["2024-12-19", 151.79], ["2024-12-20", 46.0], ["2024-12-21", 108.1], ["2024-12-22", 142.0], ["2024-12-23", 78.6], ["2024-12-24", 63.6], ["2024-12-25", 41.25], ["2024-12-26", 103.84], ["2024-12-27", 172.95], ["2024-12-28", 398.6], ["2024-12-30", 47.5], ["2024-12-31", 69.99], ["2025-01-01", 193.95], ["2025-01-02", 284.5], ["2025-01-03", 34.25], ["2025-01-04", 256.15], ["2025-01-07", 370.47], ["2025-01-08", 220.25], ["2025-01-09", 179.9], ["2025-01-10", 88.5], ["2025-01-12", 148.25], ["2025-01-13", 38.75], ["2025-01-14", 211.1], ["2025-01-15", 80.5], ["2025-01-16", 239.45], ["2025-01-17", 164.05], ["2025-01-18", 241.5], ["2025-01-19", 224.45], ["2025-01-20", 123.85], ["2025-01-21", 48.0], ["2025-01-22", 331.49], ["2025-01-23", 269.99], ["2025-01-24", 130.78], ["2025-01-25", 490.29], ["2025-01-26", 616.34], ["2025-01-27", 234.58], ["2025-01-28", 549.13], ["2025-01-29", 132.15], ["2025-01-31", 616.6], ["2025-02-01", 278.7], ["2025-02-02", 68.25], ["2025-02-03", 71.0], ["2025-02-04", 588.14], ["2025-02-05", 334.23], ["2025-02-06", 102.9], ["2025-02-07", 212.39], ["2025-02-08", 650.75], ["2025-02-09", 45.05], ["2025-02-10", 129.6], ["2025-02-11", 189.98], ["2025-02-12", 351.4], ["2025-02-13", 575.05], ["2025-02-15", 193.99], ["2025-02-16", 357.85], ["2025-02-17", 233.1], ["2025-02-18", 227.58], ["2025-02-19", 341.79], ["2025-02-20", 409.43], ["2025-02-21", 374.65], ["2025-02-22", 343.0], ["2025-02-23", 81.0], ["2025-02-24", 177.69], ["2025-02-25", 110.09], ["2025-02-26", 390.03], ["2025-02-27", 235.48], ["2025-02-28", 349.8], ["2025-03-01", 145.5], ["2025-03-02", 361.4], ["2025-03-03", 343.24], ["2025-03-04", 581.15], ["2025-03-05", 195.2], ["2025-03-06", 344.29], ["2025-03-07", 82.0], ["2025-03-08", 357.19], ["2025-03-09", 214.04], ["2025-03-10", 178.2], ["2025-03-11", 247.93], ["2025-03-12", 466.7], ["2025-03-13", 449.2], ["2025-03-14", 530.85], ["2025-03-15", 661.68], ["2025-03-16", 428.19], ["2025-03-17", 381.69], ["2025-03-18", 412.27], ["2025-03-19", 457.93], ["2025-03-20", 489.55], ["2025-03-21", 219.3], ["2025-03-22", 657.81], ["2025-03-23", 225.63], ["2025-03-24", 666.32], ["2025-03-25", 507.9], ["2025-03-26", 587.55], ["2025-03-27", 750.72], ["2025-03-28", 572.15], ["2025-03-29", 383.96], ["2025-03-30", 347.0], ["2025-03-31", 884.68], ["2025-04-01", 708.84], ["2025-04-02", 422.99], ["2025-04-03", 570.87], ["2025-04-04", 378.11], ["2025-04-05", 1000.0], ["2025-04-06", 659.81], ["2025-04-07", 509.8], ["2025-04-08", 662.44], ["2025-04-09", 670.47], ["2025-04-10", 1091.67], ["2025-04-11", 880.85], ["2025-04-12", 538.99], ["2025-04-13", 536.04], ["2025-04-14", 1045.35], ["2025-04-15", 1268.4], ["2025-04-16", 601.45], ["2025-04-17", 708.0], ["2025-04-18", 565.59], ["2025-04-19", 1042.04], ["2025-04-20", 680.29], ["2025-04-21", 717.54], ["2025-04-22", 1016.21], ["2025-04-23", 499.73], ["2025-04-24", 1912.02], ["2025-04-25", 1023.22], ["2025-04-26", 942.39], ["2025-04-27", 1664.95], ["2025-04-28", 1591.58], ["2025-04-29", 939.85], ["2025-04-30", 693.42], ["2025-05-01", 576.27], ["2025-05-02", 566.37], ["2025-05-03", 1145.09], ["2025-05-04", 993.23], ["2025-05-05", 1133.64], ["2025-05-06", 1021.28], ["2025-05-07", 884.35], ["2025-05-08", 1156.97], ["2025-05-09", 1772.68], ["2025-05-10", 724.05], ["2025-05-11", 1841.68], ["2025-05-12", 1406.05], ["2025-05-13", 1159.62], ["2025-05-14", 804.89], ["2025-05-15", 1219.22], ["2025-05-16", 1444.49], ["2025-05-17", 1622.81], ["2025-05-18", 1213.2], ["2025-05-19", 2146.34], ["2025-05-20", 306.5], ["2025-05-21", 1297.49], ["2025-05-22", 1080.12], ["2025-05-23", 1503.59], ["2025-05-24", 1157.89], ["2025-05-25", 658.09], ["2025-05-26", 782.29], ["2025-05-27", 1428.97], ["2025-05-28", 1100.73], ["2025-05-29", 1825.53], ["2025-05-30", 1142.69], ["2025-05-31", 1447.16], ["2025-06-01", 1046.55], ["2025-06-02", 1142.01], ["2025-06-03", 494.7], ["2025-06-04", 1810.62], ["2025-06-05", 1449.0], ["2025-06-06", 818.53], ["2025-06-07", 1161.03], ["2025-06-08", 715.24], ["2025-06-09", 1511.88], ["2025-06-10", 1375.44], ["2025-06-11", 1151.4], ["2025-06-12", 1452.79], ["2025-06-13", 1326.18], ["2025-06-14", 1115.08], ["2025-06-15", 1270.44], ["2025-06-16", 1377.65], ["2025-06-17", 1460.69], ["2025-06-18", 939.63], ["2025-06-19", 2578.22], ["2025-06-20", 1117.46], ["2025-06-21", 1926.32], ["2025-06-22", 1637.24], ["2025-06-23", 1951.84], ["2025-06-24", 1905.22], ["2025-06-25", 1226.77], ["2025-06-26", 2226.55], ["2025-06-27", 1515.18], ["2025-06-28", 2097.39], ["2025-06-29", 1690.33], ["2025-06-30", 1910.85], ["2025-07-01", 1289.74], ["2025-07-02", 1345.74], ["2025-07-03", 2061.27], ["2025-07-04", 1303.51], ["2025-07-05", 2085.42], ["2025-07-06", 1974.47], ["2025-07-07", 1091.09], ["2025-07-08", 1821.28], ["2025-07-09", 1093.35], ["2025-07-10", 1780.87], ["2025-07-11", 1440.85], ["2025-07-12", 2385.93], ["2025-07-13", 1669.63], ["2025-07-14", 1600.28], ["2025-07-15", 1906.06], ["2025-07-16", 2152.53], ["2025-07-17", 2020.41], ["2025-07-18", 1157.03], ["2025-07-19", 1541.0], ["2025-07-20", 1607.46], ["2025-07-21", 1706.21], ["2025-07-22", 1992.34], ["2025-07-23", 2061.53], ["2025-07-24", 2240.24], ["2025-07-25", 1815.66], ["2025-07-26", 1760.57], ["2025-07-27", 1566.07], ["2025-07-28", 1223.26], ["2025-07-29", 1138.3], ["2025-07-30", 1562.71], ["2025-07-31", 2307.97], ["2025-08-01", 2125.97], ["2025-08-02", 2033.4], ["2025-08-03", 1538.94], ["2025-08-04", 1183.73], ["2025-08-05", 1935.98], ["2025-08-06", 2306.39], ["2025-08-07", 1803.73], ["2025-08-08", 2125.56], ["2025-08-09", 1571.2], ["2025-08-10", 1961.38], ["2025-08-11", 1793.65], ["2025-08-12", 1678.19], ["2025-08-13", 2417.95], ["2025-08-14", 2102.45], ["2025-08-15", 1821.55], ["2025-08-16", 1735.52], ["2025-08-17", 1554.64], ["2025-08-18", 2396.06], ["2025-08-19", 2308.64], ["2025-08-20", 3719.35], ["2025-08-21", 2663.16], ["2025-08-22", 1539.34], ["2025-08-23", 2387.87], ["2025-08-24", 2780.82], ["2025-08-25", 2389.8], ["2025-08-26", 2502.11], ["2025-08-27", 2115.65], ["2025-08-28", 2153.2], ["2025-08-29", 2442.99], ["2025-08-30", 2556.13], ["2025-08-31", 2471.17], ["2025-09-01", 1753.17], ["2025-09-02", 2256.32], ["2025-09-03", 3263.25], ["2025-09-04", 1536.6], ["2025-09-05", 2568.79], ["2025-09-06", 2485.66], ["2025-09-07", 1695.6], ["2025-09-08", 2212.39], ["2025-09-09", 1480.06], ["2025-09-10", 2975.08], ["2025-09-11", 2473.66], ["2025-09-12", 2472.58], ["2025-09-13", 2323.25], ["2025-09-14", 2242.66], ["2025-09-15", 2333.02], ["2025-09-16", 2822.8], ["2025-09-17", 2572.48], ["2025-09-18", 2384.55], ["2025-09-19", 1767.42], ["2025-09-20", 2069.84], ["2025-09-21", 2100.07], ["2025-09-22", 3587.94], ["2025-09-23", 2039.8], ["2025-09-24", 2231.98], ["2025-09-25", 1597.06], ["2025-09-26", 2658.01], ["2025-09-27", 1863.61], ["2025-09-28", 3135.13], ["2025-09-29", 2362.32], ["2025-09-30", 2073.34], ["2025-10-01", 1651.95], ["2025-10-02", 2773.87], ["2025-10-03", 1788.5], ["2025-10-04", 2431.78], ["2025-10-05", 2448.99], ["2025-10-06", 2150.98], ["2025-10-07", 2921.25], ["2025-10-08", 2036.17], ["2025-10-09", 1959.23], ["2025-10-10", 1955.7], ["2025-10-11", 2617.7], ["2025-10-12", 2456.16], ["2025-10-13", 3200.58], ["2025-10-14", 2765.24], ["2025-10-15", 2417.95], ["2025-10-16", 1698.76], ["2025-10-17", 3252.32], ["2025-10-18", 2191.12], ["2025-10-19", 1966.93], ["2025-10-20", 2085.34], ["2025-10-21", 2698.68], ["2025-10-22", 2114.83], ["2025-10-23", 2219.37], ["2025-10-24", 2866.14], ["2025-10-25", 1581.64], ["2025-10-26", 2103.94], ["2025-10-27", 1815.04], ["2025-10-28", 2543.74], ["2025-10-29", 2437.91], ["2025-10-30", 3071.6], ["2025-10-31", 1633.48], ["2025-11-01", 1915.9], ["2025-11-02", 1584.81], ["2025-11-03", 2637.83], ["2025-11-04", 3241.34], ["2025-11-05", 2949.29], ["2025-11-06", 1613.99], ["2025-11-07", 2145.31], ["2025-11-08", 1705.38], ["2025-11-09", 2061.73], ["2025-11-10", 2622.07], ["2025-11-11", 2227.46], ["2025-11-12", 2256.41], ["2025-11-13", 2204.49], ["2025-11-14", 2891.67], ["2025-11-15", 1530.64], ["2025-11-16", 2509.9], ["2025-11-17", 2548.07], ["2025-11-18", 1784.46], ["2025-11-19", 2610.8], ["2025-11-20", 2522.85], ["2025-11-21", 1603.42], ["2025-11-22", 2298.91], ["2025-11-23", 2000.04], ["2025-11-24", 1595.34], ["2025-11-25", 2163.26], ["2025-11-26", 1864.48], ["2025-11-27", 1919.83], ["2025-11-28", 2821.92], ["2025-11-29", 2141.28], ["2025-11-30", 1555.46], ["2025-12-01", 2132.48], ["2025-12-02", 2282.89], ["2025-12-03", 2421.33], ["2025-12-04", 1943.07], ["2025-12-05", 2718.61], ["2025-12-06", 2501.56], ["2025-12-07", 1626.34], ["2025-12-08", 1289.36], ["2025-12-09", 2370.98], ["2025-12-10", 2046.68], ["2025-12-11", 2225.63], ["2025-12-12", 1967.89], ["2025-12-13", 2250.62], ["2025-12-14", 2001.0], ["2025-12-15", 1838.78], ["2025-12-16", 2129.91], ["2025-12-17", 2444.43], ["2025-12-18", 2694.72], ["2025-12-19", 2618.56], ["2025-12-20", 2398.2], ["2025-12-21", 2229.88], ["2025-12-22", 2465.8], ["2025-12-23", 2051.62], ["2025-12-24", 1948.65], ["2025-12-25", 1865.07], ["2025-12-26", 1170.34], ["2025-12-27", 1757.62], ["2025-12-28", 2830.96], ["2025-12-29", 2296.91], ["2025-12-30", 3003.89], ["2025-12-31", 1663.5], ["2026-01-01", 2147.6], ["2026-01-02", 2114.29], ["2026-01-03", 2361.54], ["2026-01-04", 1511.54], ["2026-01-05", 2669.97], ["2026-01-06", 1359.41], ["2026-01-07", 1553.68], ["2026-01-08", 1460.32], ["2026-01-09", 2289.95], ["2026-01-10", 1670.23], ["2026-01-11", 1924.83], ["2026-01-12", 1788.6], ["2026-01-13", 2081.39], ["2026-01-14", 1698.99], ["2026-01-15", 3307.38], ["2026-01-16", 2339.78], ["2026-01-17", 1316.55], ["2026-01-18", 1733.92], ["2026-01-19", 1886.82], ["2026-01-20", 1370.77], ["2026-01-21", 1769.37], ["2026-01-22", 1762.24], ["2026-01-23", 2751.26], ["2026-01-24", 1824.44], ["2026-01-25", 2704.35], ["2026-01-26", 1806.2], ["2026-01-27", 1334.25], ["2026-01-28", 1331.38], ["2026-01-29", 2154.34], ["2026-01-30", 1588.14], ["2026-01-31", 1604.85], ["2026-02-01", 3127.57], ["2026-02-02", 2389.98], ["2026-02-03", 1704.24], ["2026-02-04", 1782.27], ["2026-02-05", 1918.8], ["2026-02-06", 2243.98], ["2026-02-07", 2052.78], ["2026-02-08", 910.26], ["2026-02-09", 1605.67], ["2026-02-10", 2412.14], ["2026-02-11", 1865.16], ["2026-02-12", 1178.22], ["2026-02-13", 1648.4], ["2026-02-14", 2005.11], ["2026-02-15", 1717.2], ["2026-02-16", 805.62], ["2026-02-17", 1222.53], ["2026-02-18", 1676.57], ["2026-02-19", 1246.81], ["2026-02-20", 1777.86], ["2026-02-21", 1196.67], ["2026-02-22", 1926.69], ["2026-02-23", 1128.74], ["2026-02-24", 1891.12], ["2026-02-25", 1476.18], ["2026-02-26", 1672.41], ["2026-02-27", 1734.24], ["2026-02-28", 1898.12], ["2026-03-01", 1704.27], ["2026-03-02", 1875.31], ["2026-03-03", 1122.67], ["2026-03-04", 1284.24], ["2026-03-05", 1403.99], ["2026-03-06", 1516.43], ["2026-03-07", 1482.96], ["2026-03-08", 1115.32], ["2026-03-09", 1253.86], ["2026-03-10", 953.98], ["2026-03-11", 1127.96], ["2026-03-12", 1098.28], ["2026-03-13", 1011.03], ["2026-03-14", 1249.03], ["2026-03-15", 1101.75], ["2026-03-16", 1281.5], ["2026-03-17", 1406.35], ["2026-03-18", 1409.24], ["2026-03-19", 860.63], ["2026-03-20", 390.99], ["2026-03-21", 1045.09], ["2026-03-22", 531.98], ["2026-03-23", 871.3], ["2026-03-24", 1327.67], ["2026-03-25", 878.35], ["2026-03-26", 973.95], ["2026-03-27", 553.24], ["2026-03-28", 1211.67], ["2026-03-29", 653.89], ["2026-03-30", 1681.52], ["2026-03-31", 1284.28], ["2026-04-01", 1358.7], ["2026-04-02", 832.69], ["2026-04-03", 1486.01], ["2026-04-04", 1432.34], ["2026-04-05", 1060.85], ["2026-04-06", 434.25], ["2026-04-07", 940.58], ["2026-04-08", 950.99], ["2026-04-09", 880.52], ["2026-04-10", 763.97], ["2026-04-11", 1061.08], ["2026-04-12", 638.0], ["2026-04-13", 616.53], ["2026-04-14", 877.7], ["2026-04-15", 1042.26], ["2026-04-16", 346.57], ["2026-04-17", 738.29], ["2026-04-18", 1414.21], ["2026-04-19", 633.21], ["2026-04-20", 1025.3], ["2026-04-21", 879.82], ["2026-04-22", 1469.86], ["2026-04-23", 1041.95], ["2026-04-24", 846.92], ["2026-04-25", 696.84], ["2026-04-26", 731.33], ["2026-04-27", 751.25], ["2026-04-28", 1431.06], ["2026-04-29", 639.05], ["2026-04-30", 474.4], ["2026-05-01", 834.74], ["2026-05-02", 722.29], ["2026-05-03", 625.44], ["2026-05-04", 691.69], ["2026-05-05", 844.53], ["2026-05-06", 1750.79], ["2026-05-07", 663.32], ["2026-05-08", 600.59], ["2026-05-09", 616.91], ["2026-05-10", 1031.5], ["2026-05-11", 241.78], ["2026-05-12", 823.73], ["2026-05-13", 351.49], ["2026-05-14", 729.99], ["2026-05-15", 321.74], ["2026-05-16", 621.75], ["2026-05-17", 665.79], ["2026-05-18", 613.52], ["2026-05-19", 807.46], ["2026-05-20", 786.98], ["2026-05-21", 740.18], ["2026-05-22", 366.03], ["2026-05-23", 462.8], ["2026-05-24", 391.74], ["2026-05-25", 696.89], ["2026-05-26", 312.5], ["2026-05-27", 430.47], ["2026-05-28", 510.46], ["2026-05-29", 385.25], ["2026-05-30", 959.66], ["2026-05-31", 449.84], ["2026-06-01", 425.87], ["2026-06-02", 616.57], ["2026-06-03", 954.34], ["2026-06-04", 366.2], ["2026-06-05", 738.55], ["2026-06-06", 309.85], ["2026-06-07", 478.45], ["2026-06-08", 762.8], ["2026-06-09", 670.2], ["2026-06-10", 427.25], ["2026-06-11", 219.0], ["2026-06-12", 177.15], ["2026-06-13", 571.97], ["2026-06-14", 158.46], ["2026-06-15", 590.05], ["2026-06-16", 330.99], ["2026-06-18", 408.95], ["2026-06-19", 237.55], ["2026-06-20", 235.4], ["2026-06-21", 456.71], ["2026-06-22", 356.73], ["2026-06-23", 240.4], ["2026-06-25", 235.25], ["2026-06-26", 173.1], ["2026-06-27", 673.47], ["2026-06-28", 670.7], ["2026-06-29", 383.28], ["2026-07-01", 311.0], ["2026-07-02", 1182.8], ["2026-07-03", 172.76], ["2026-07-04", 541.47], ["2026-07-05", 249.87], ["2026-07-06", 104.05], ["2026-07-07", 138.8], ["2026-07-08", 194.48], ["2026-07-09", 136.18], ["2026-07-10", 147.4], ["2026-07-11", 314.25], ["2026-07-12", 88.8], ["2026-07-13", 101.75], ["2026-07-14", 66.0], ["2026-07-15", 259.1], ["2026-07-16", 277.38], ["2026-07-17", 594.09], ["2026-07-18", 100.89], ["2026-07-19", 412.55], ["2026-07-20", 366.45], ["2026-07-21", 139.5], ["2026-07-22", 234.3], ["2026-07-23", 240.49], ["2026-07-24", 135.57], ["2026-07-25", 124.58], ["2026-07-28", 117.04], ["2026-07-29", 205.2], ["2026-07-30", 66.0], ["2026-07-31", 24.0], ["2026-08-01", 120.1], ["2026-08-02", 189.15], ["2026-08-03", 317.6], ["2026-08-04", 25.0], ["2026-08-05", 103.0], ["2026-08-06", 40.0], ["2026-08-10", 71.7], ["2026-08-11", 280.8], ["2026-08-12", 67.19], ["2026-08-14", 22.2], ["2026-08-15", 107.46], ["2026-08-16", 56.99], ["2026-08-17", 418.25], ["2026-08-20", 22.99], ["2026-08-22", 86.5], ["2026-08-23", 126.0], ["2026-08-25", 90.2], ["2026-08-26", 99.65], ["2026-09-01", 24.0], ["2026-09-06", 66.0], ["2026-09-14", 57.98], ["2026-09-15", 73.8], ["2026-09-24", 42.5]], "STORE2": [["2024-11-23", 45.0], ["2024-11-28", 134.0], ["2024-11-29", 40.0], ["2024-11-30", 125.5], ["2024-12-06", 242.0], ["2024-12-07", 305.99], ["2024-12-08", 38.4], ["2024-12-13", 31.2], ["2024-12-14", 138.0], ["2024-12-15", 241.17], ["2024-12-16", 183.39], ["2024-12-17", 100.3], ["2024-12-18", 128.0], ["2024-12-20", 54.0], ["2024-12-21", 116.5], ["2024-12-22", 23.5], ["2024-12-24", 77.05], ["2024-12-26", 111.6], ["2024-12-27", 70.5], ["2024-12-28", 348.75], ["2024-12-29", 72.49], ["2024-12-30", 53.4], ["2024-12-31", 105.5], ["2025-01-01", 407.63], ["2025-01-03", 256.95], ["2025-01-04", 89.3], ["2025-01-05", 47.49], ["2025-01-06", 69.0], ["2025-01-07", 64.75], ["2025-01-08", 48.0], ["2025-01-09", 264.34], ["2025-01-10", 174.0], ["2025-01-11", 661.5], ["2025-01-13", 42.0], ["2025-01-14", 89.49], ["2025-01-15", 138.25], ["2025-01-16", 336.14], ["2025-01-17", 131.65], ["2025-01-18", 63.99], ["2025-01-19", 383.0], ["2025-01-20", 153.46], ["2025-01-22", 196.49], ["2025-01-23", 331.0], ["2025-01-24", 36.0], ["2025-01-25", 162.16], ["2025-01-26", 146.75], ["2025-01-27", 169.5], ["2025-01-28", 252.6], ["2025-01-29", 187.18], ["2025-01-30", 268.8], ["2025-01-31", 684.04], ["2025-02-01", 148.0], ["2025-02-02", 81.6], ["2025-02-03", 217.59], ["2025-02-04", 225.6], ["2025-02-05", 380.04], ["2025-02-06", 309.6], ["2025-02-07", 424.86], ["2025-02-08", 197.25], ["2025-02-09", 624.99], ["2025-02-10", 400.1], ["2025-02-11", 316.75], ["2025-02-12", 431.82], ["2025-02-13", 128.74], ["2025-02-14", 230.0], ["2025-02-15", 552.7], ["2025-02-16", 115.59], ["2025-02-18", 612.35], ["2025-02-19", 124.99], ["2025-02-20", 566.55], ["2025-02-21", 282.9], ["2025-02-22", 140.54], ["2025-02-23", 261.35], ["2025-02-24", 524.69], ["2025-02-25", 87.0], ["2025-02-26", 414.93], ["2025-02-27", 210.69], ["2025-02-28", 268.18], ["2025-03-01", 206.89], ["2025-03-02", 628.8], ["2025-03-03", 90.49], ["2025-03-04", 273.6], ["2025-03-05", 279.37], ["2025-03-06", 209.09], ["2025-03-07", 121.0], ["2025-03-08", 596.12], ["2025-03-09", 1319.55], ["2025-03-10", 259.99], ["2025-03-11", 51.5], ["2025-03-12", 502.55], ["2025-03-13", 605.7], ["2025-03-14", 507.69], ["2025-03-15", 565.45], ["2025-03-16", 613.3], ["2025-03-17", 457.98], ["2025-03-18", 1011.33], ["2025-03-19", 866.64], ["2025-03-20", 575.28], ["2025-03-21", 287.69], ["2025-03-22", 529.05], ["2025-03-23", 316.24], ["2025-03-24", 682.34], ["2025-03-25", 278.66], ["2025-03-26", 325.85], ["2025-03-27", 708.01], ["2025-03-28", 678.62], ["2025-03-29", 789.2], ["2025-03-30", 83.75], ["2025-03-31", 359.25], ["2025-04-01", 842.99], ["2025-04-02", 912.45], ["2025-04-03", 450.48], ["2025-04-04", 301.18], ["2025-04-05", 790.78], ["2025-04-06", 192.8], ["2025-04-07", 524.14], ["2025-04-08", 442.45], ["2025-04-09", 611.04], ["2025-04-10", 843.62], ["2025-04-11", 531.98], ["2025-04-12", 484.27], ["2025-04-13", 667.15], ["2025-04-14", 1090.76], ["2025-04-15", 412.24], ["2025-04-16", 994.26], ["2025-04-17", 1293.51], ["2025-04-18", 517.04], ["2025-04-19", 957.35], ["2025-04-20", 711.0], ["2025-04-21", 625.59], ["2025-04-22", 430.73], ["2025-04-23", 521.49], ["2025-04-24", 718.98], ["2025-04-25", 867.37], ["2025-04-26", 1004.05], ["2025-04-27", 803.37], ["2025-04-28", 2093.49], ["2025-04-29", 1540.46], ["2025-04-30", 1177.8], ["2025-05-01", 487.9], ["2025-05-02", 1033.56], ["2025-05-03", 899.43], ["2025-05-04", 633.44], ["2025-05-05", 1002.78], ["2025-05-06", 1394.12], ["2025-05-07", 784.6], ["2025-05-08", 675.11], ["2025-05-09", 1030.91], ["2025-05-10", 1178.85], ["2025-05-11", 817.85], ["2025-05-12", 943.94], ["2025-05-13", 821.4], ["2025-05-14", 511.93], ["2025-05-15", 1277.09], ["2025-05-16", 431.44], ["2025-05-17", 903.1], ["2025-05-18", 948.65], ["2025-05-19", 897.0], ["2025-05-20", 1269.69], ["2025-05-21", 1107.81], ["2025-05-22", 1299.63], ["2025-05-23", 778.89], ["2025-05-24", 1082.45], ["2025-05-25", 1662.53], ["2025-05-26", 1607.19], ["2025-05-27", 1604.45], ["2025-05-28", 1115.74], ["2025-05-29", 1290.06], ["2025-05-30", 1230.74], ["2025-05-31", 1502.83], ["2025-06-01", 849.6], ["2025-06-02", 1526.12], ["2025-06-03", 1175.34], ["2025-06-04", 977.24], ["2025-06-05", 1003.08], ["2025-06-06", 1401.08], ["2025-06-07", 1262.7], ["2025-06-08", 989.27], ["2025-06-09", 1225.28], ["2025-06-10", 1234.29], ["2025-06-11", 788.13], ["2025-06-12", 1876.98], ["2025-06-13", 838.36], ["2025-06-14", 1004.18], ["2025-06-15", 877.39], ["2025-06-16", 1311.02], ["2025-06-17", 385.64], ["2025-06-18", 2714.54], ["2025-06-19", 1880.57], ["2025-06-20", 1496.25], ["2025-06-21", 1502.53], ["2025-06-22", 1009.48], ["2025-06-23", 1380.83], ["2025-06-24", 1444.94], ["2025-06-25", 2138.05], ["2025-06-26", 1042.11], ["2025-06-27", 1435.83], ["2025-06-28", 1257.81], ["2025-06-29", 1092.43], ["2025-06-30", 999.7], ["2025-07-01", 880.11], ["2025-07-02", 1850.06], ["2025-07-03", 2098.52], ["2025-07-04", 1305.98], ["2025-07-05", 1596.56], ["2025-07-06", 1320.26], ["2025-07-07", 2501.43], ["2025-07-08", 1774.49], ["2025-07-09", 1256.23], ["2025-07-10", 1045.19], ["2025-07-11", 1464.68], ["2025-07-12", 1172.1], ["2025-07-13", 1449.18], ["2025-07-14", 1761.44], ["2025-07-15", 1960.54], ["2025-07-16", 1491.23], ["2025-07-17", 853.68], ["2025-07-18", 1587.72], ["2025-07-19", 1635.19], ["2025-07-20", 2112.81], ["2025-07-21", 2004.62], ["2025-07-22", 2015.38], ["2025-07-23", 1612.28], ["2025-07-24", 1680.61], ["2025-07-25", 1389.03], ["2025-07-26", 1666.61], ["2025-07-27", 2127.17], ["2025-07-28", 1292.86], ["2025-07-29", 1788.42], ["2025-07-30", 1784.92], ["2025-07-31", 1040.18], ["2025-08-01", 1859.2], ["2025-08-02", 1429.38], ["2025-08-03", 2578.09], ["2025-08-04", 1395.22], ["2025-08-05", 1487.12], ["2025-08-06", 2091.44], ["2025-08-07", 1469.27], ["2025-08-08", 1840.14], ["2025-08-09", 1936.12], ["2025-08-10", 2289.12], ["2025-08-11", 1920.75], ["2025-08-12", 2216.92], ["2025-08-13", 1876.21], ["2025-08-14", 1507.1], ["2025-08-15", 1733.49], ["2025-08-16", 1483.14], ["2025-08-17", 2482.4], ["2025-08-18", 1563.59], ["2025-08-19", 1511.36], ["2025-08-20", 2262.56], ["2025-08-21", 1821.42], ["2025-08-22", 1142.53], ["2025-08-23", 1927.22], ["2025-08-24", 2462.51], ["2025-08-25", 1104.62], ["2025-08-26", 1932.18], ["2025-08-27", 1140.3], ["2025-08-28", 2807.88], ["2025-08-29", 1881.55], ["2025-08-30", 1747.91], ["2025-08-31", 1828.77], ["2025-09-01", 1546.48], ["2025-09-02", 1565.11], ["2025-09-03", 2245.42], ["2025-09-04", 2848.67], ["2025-09-05", 1820.04], ["2025-09-06", 1765.06], ["2025-09-07", 1479.7], ["2025-09-08", 1813.6], ["2025-09-09", 2253.61], ["2025-09-10", 1709.79], ["2025-09-11", 2621.1], ["2025-09-12", 1237.67], ["2025-09-13", 1407.07], ["2025-09-14", 1707.04], ["2025-09-15", 1932.68], ["2025-09-16", 1680.31], ["2025-09-17", 2354.39], ["2025-09-18", 1458.45], ["2025-09-19", 2938.86], ["2025-09-20", 2061.98], ["2025-09-21", 1988.15], ["2025-09-22", 1272.1], ["2025-09-23", 1352.18], ["2025-09-24", 2215.56], ["2025-09-25", 1933.71], ["2025-09-26", 1145.64], ["2025-09-27", 1402.38], ["2025-09-28", 2540.5], ["2025-09-29", 1785.25], ["2025-09-30", 2651.25], ["2025-10-01", 1740.18], ["2025-10-02", 2293.05], ["2025-10-03", 1832.91], ["2025-10-04", 2237.11], ["2025-10-05", 2255.77], ["2025-10-06", 1520.04], ["2025-10-07", 1300.63], ["2025-10-08", 1926.24], ["2025-10-09", 2453.36], ["2025-10-10", 1942.42], ["2025-10-11", 1230.37], ["2025-10-12", 2690.29], ["2025-10-13", 1862.14], ["2025-10-14", 1726.47], ["2025-10-15", 1942.79], ["2025-10-16", 1988.22], ["2025-10-17", 1877.75], ["2025-10-18", 1985.04], ["2025-10-19", 2467.21], ["2025-10-20", 2164.9], ["2025-10-21", 1611.94], ["2025-10-22", 2139.09], ["2025-10-23", 2273.2], ["2025-10-24", 2383.46], ["2025-10-25", 2660.96], ["2025-10-26", 1666.43], ["2025-10-27", 1868.77], ["2025-10-28", 1766.33], ["2025-10-29", 1648.74], ["2025-10-30", 1821.03], ["2025-10-31", 2399.29], ["2025-11-01", 2163.43], ["2025-11-02", 1614.3], ["2025-11-03", 1598.87], ["2025-11-04", 2577.02], ["2025-11-05", 2167.45], ["2025-11-06", 2543.1], ["2025-11-07", 1472.73], ["2025-11-08", 2494.07], ["2025-11-09", 1432.47], ["2025-11-10", 1765.05], ["2025-11-11", 2775.41], ["2025-11-12", 2493.8], ["2025-11-13", 2103.4], ["2025-11-14", 1877.79], ["2025-11-15", 1847.41], ["2025-11-16", 3789.61], ["2025-11-17", 1924.2], ["2025-11-18", 2498.16], ["2025-11-19", 2915.2], ["2025-11-20", 2195.82], ["2025-11-21", 1895.35], ["2025-11-22", 2693.19], ["2025-11-23", 1762.78], ["2025-11-24", 2828.16], ["2025-11-25", 1971.56], ["2025-11-26", 1899.21], ["2025-11-27", 916.6], ["2025-11-28", 2064.07], ["2025-11-29", 2014.16], ["2025-11-30", 2104.88], ["2025-12-01", 1992.57], ["2025-12-02", 1737.22], ["2025-12-03", 2157.97], ["2025-12-04", 2884.4], ["2025-12-05", 1859.37], ["2025-12-06", 1720.62], ["2025-12-07", 1880.07], ["2025-12-08", 2460.07], ["2025-12-09", 2101.79], ["2025-12-10", 3024.53], ["2025-12-11", 1589.96], ["2025-12-12", 3127.15], ["2025-12-13", 2527.62], ["2025-12-14", 1700.09], ["2025-12-15", 1618.62], ["2025-12-16", 1947.06], ["2025-12-17", 1831.11], ["2025-12-18", 1110.24], ["2025-12-19", 2529.29], ["2025-12-20", 2360.37], ["2025-12-21", 2094.33], ["2025-12-22", 1426.96], ["2025-12-23", 1340.05], ["2025-12-24", 2006.23], ["2025-12-25", 1935.99], ["2025-12-26", 1923.91], ["2025-12-27", 2614.26], ["2025-12-28", 1866.13], ["2025-12-29", 2101.69], ["2025-12-30", 2418.37], ["2025-12-31", 1976.14], ["2026-01-01", 1560.85], ["2026-01-02", 1549.86], ["2026-01-03", 1609.35], ["2026-01-04", 1702.31], ["2026-01-05", 1742.03], ["2026-01-06", 2336.3], ["2026-01-07", 846.24], ["2026-01-08", 2633.4], ["2026-01-09", 1677.38], ["2026-01-10", 2422.63], ["2026-01-11", 2091.45], ["2026-01-12", 1453.64], ["2026-01-13", 1652.73], ["2026-01-14", 2380.52], ["2026-01-15", 2688.63], ["2026-01-16", 2119.23], ["2026-01-17", 1573.91], ["2026-01-18", 2563.58], ["2026-01-19", 930.74], ["2026-01-20", 1516.22], ["2026-01-21", 1051.88], ["2026-01-22", 935.37], ["2026-01-23", 1233.29], ["2026-01-24", 1554.73], ["2026-01-25", 1987.97], ["2026-01-26", 2512.44], ["2026-01-27", 2379.95], ["2026-01-28", 1075.76], ["2026-01-29", 2620.56], ["2026-01-30", 1647.18], ["2026-01-31", 1982.56], ["2026-02-01", 1687.04], ["2026-02-02", 1222.01], ["2026-02-03", 2077.62], ["2026-02-04", 1619.61], ["2026-02-05", 1079.94], ["2026-02-06", 1069.73], ["2026-02-07", 1195.73], ["2026-02-08", 1836.09], ["2026-02-09", 923.74], ["2026-02-10", 1370.26], ["2026-02-11", 1364.62], ["2026-02-12", 1853.3], ["2026-02-13", 1867.86], ["2026-02-14", 1121.06], ["2026-02-15", 1953.67], ["2026-02-16", 1031.77], ["2026-02-17", 1599.41], ["2026-02-18", 1372.59], ["2026-02-19", 2683.95], ["2026-02-20", 1536.98], ["2026-02-21", 616.19], ["2026-02-22", 1107.38], ["2026-02-23", 1661.29], ["2026-02-24", 1020.0], ["2026-02-25", 1634.67], ["2026-02-26", 1598.09], ["2026-02-27", 1071.87], ["2026-02-28", 714.99], ["2026-03-01", 1225.85], ["2026-03-02", 697.29], ["2026-03-03", 1643.59], ["2026-03-04", 907.73], ["2026-03-05", 655.35], ["2026-03-06", 2179.99], ["2026-03-07", 1045.22], ["2026-03-08", 1571.63], ["2026-03-09", 1057.34], ["2026-03-10", 1018.07], ["2026-03-11", 1285.33], ["2026-03-12", 742.68], ["2026-03-13", 1412.67], ["2026-03-14", 1540.33], ["2026-03-15", 1155.98], ["2026-03-16", 1988.65], ["2026-03-17", 540.58], ["2026-03-18", 1294.99], ["2026-03-19", 922.14], ["2026-03-20", 1591.5], ["2026-03-21", 775.44], ["2026-03-22", 835.75], ["2026-03-23", 1263.39], ["2026-03-24", 1075.09], ["2026-03-25", 783.08], ["2026-03-26", 798.29], ["2026-03-27", 796.36], ["2026-03-28", 1138.26], ["2026-03-29", 639.89], ["2026-03-30", 1504.38], ["2026-03-31", 751.64], ["2026-04-01", 704.48], ["2026-04-02", 1291.9], ["2026-04-03", 825.59], ["2026-04-04", 1168.66], ["2026-04-05", 1297.55], ["2026-04-06", 725.94], ["2026-04-07", 1102.12], ["2026-04-08", 662.77], ["2026-04-09", 1017.71], ["2026-04-10", 1033.91], ["2026-04-11", 808.66], ["2026-04-12", 1101.45], ["2026-04-13", 567.94], ["2026-04-14", 1658.73], ["2026-04-15", 960.51], ["2026-04-16", 371.06], ["2026-04-17", 534.75], ["2026-04-18", 537.04], ["2026-04-19", 475.69], ["2026-04-20", 761.88], ["2026-04-21", 628.58], ["2026-04-22", 774.89], ["2026-04-23", 903.9], ["2026-04-24", 368.59], ["2026-04-25", 552.65], ["2026-04-26", 593.08], ["2026-04-27", 859.49], ["2026-04-28", 596.54], ["2026-04-29", 592.19], ["2026-04-30", 113.2], ["2026-05-01", 421.49], ["2026-05-02", 912.7], ["2026-05-03", 675.45], ["2026-05-04", 911.25], ["2026-05-05", 529.9], ["2026-05-06", 459.65], ["2026-05-07", 897.13], ["2026-05-08", 369.49], ["2026-05-09", 236.24], ["2026-05-10", 619.14], ["2026-05-11", 940.95], ["2026-05-12", 700.29], ["2026-05-13", 494.75], ["2026-05-14", 876.4], ["2026-05-15", 390.54], ["2026-05-16", 293.0], ["2026-05-17", 695.7], ["2026-05-18", 337.95], ["2026-05-19", 872.09], ["2026-05-20", 816.64], ["2026-05-21", 533.7], ["2026-05-22", 368.95], ["2026-05-23", 300.25], ["2026-05-24", 413.49], ["2026-05-25", 310.75], ["2026-05-26", 912.3], ["2026-05-27", 497.25], ["2026-05-28", 312.75], ["2026-05-29", 464.2], ["2026-05-30", 820.93], ["2026-05-31", 631.88], ["2026-06-01", 577.85], ["2026-06-02", 26.25], ["2026-06-03", 483.25], ["2026-06-04", 271.75], ["2026-06-05", 553.7], ["2026-06-06", 295.75], ["2026-06-07", 142.69], ["2026-06-08", 403.64], ["2026-06-09", 355.29], ["2026-06-10", 121.6], ["2026-06-11", 317.25], ["2026-06-12", 397.65], ["2026-06-13", 440.89], ["2026-06-14", 267.65], ["2026-06-15", 495.44], ["2026-06-16", 335.0], ["2026-06-17", 126.95], ["2026-06-18", 137.3], ["2026-06-19", 756.55], ["2026-06-20", 524.95], ["2026-06-21", 271.19], ["2026-06-22", 330.25], ["2026-06-23", 290.7], ["2026-06-24", 196.05], ["2026-06-25", 603.69], ["2026-06-26", 80.4], ["2026-06-27", 250.49], ["2026-06-28", 114.8], ["2026-06-29", 530.47], ["2026-06-30", 182.79], ["2026-07-01", 397.48], ["2026-07-02", 114.0], ["2026-07-03", 333.69], ["2026-07-04", 360.39], ["2026-07-05", 53.75], ["2026-07-06", 201.0], ["2026-07-07", 118.6], ["2026-07-08", 69.0], ["2026-07-09", 135.9], ["2026-07-10", 115.0], ["2026-07-12", 31.2], ["2026-07-13", 800.35], ["2026-07-14", 57.5], ["2026-07-15", 447.35], ["2026-07-16", 77.75], ["2026-07-17", 274.0], ["2026-07-18", 791.19], ["2026-07-19", 279.59], ["2026-07-20", 67.96], ["2026-07-21", 478.7], ["2026-07-22", 97.29], ["2026-07-23", 40.8], ["2026-07-24", 130.4], ["2026-07-25", 68.39], ["2026-07-26", 72.6], ["2026-07-27", 115.7], ["2026-07-28", 65.0], ["2026-07-29", 51.6], ["2026-07-30", 127.0], ["2026-07-31", 33.0], ["2026-08-01", 21.99], ["2026-08-03", 102.6], ["2026-08-04", 42.9], ["2026-08-06", 134.19], ["2026-08-08", 97.24], ["2026-08-10", 67.99], ["2026-08-11", 18.0], ["2026-08-12", 243.99], ["2026-08-13", 46.2], ["2026-08-14", 48.75], ["2026-08-15", 72.79], ["2026-08-16", 14.7], ["2026-08-17", 64.0], ["2026-08-18", 115.55], ["2026-08-20", 41.25], ["2026-08-23", 14.0], ["2026-08-24", 61.5], ["2026-08-29", 62.4], ["2026-09-02", 33.58], ["2026-09-09", 59.25], ["2026-09-11", 66.0], ["2026-09-15", 46.2], ["2026-09-17", 44.0]], "STORE3": [["2024-11-24", 38.5], ["2024-11-25", 92.5], ["2024-12-02", 99.0], ["2024-12-09", 66.5], ["2024-12-11", 24.5], ["2024-12-12", 64.0], ["2024-12-14", 73.0], ["2024-12-15", 205.2], ["2024-12-17", 72.89], ["2024-12-18", 62.0], ["2024-12-20", 268.75], ["2024-12-21", 16.5], ["2024-12-23", 123.0], ["2024-12-24", 77.29], ["2024-12-25", 93.6], ["2024-12-26", 114.39], ["2024-12-27", 172.04], ["2024-12-28", 375.0], ["2024-12-29", 103.2], ["2024-12-30", 46.75], ["2024-12-31", 36.99], ["2025-01-01", 171.95], ["2025-01-02", 118.0], ["2025-01-03", 125.8], ["2025-01-04", 28.79], ["2025-01-05", 455.95], ["2025-01-06", 146.54], ["2025-01-08", 95.4], ["2025-01-09", 99.9], ["2025-01-10", 376.0], ["2025-01-11", 118.0], ["2025-01-13", 120.0], ["2025-01-14", 399.0], ["2025-01-16", 109.75], ["2025-01-17", 695.19], ["2025-01-19", 195.25], ["2025-01-20", 58.0], ["2025-01-21", 370.55], ["2025-01-22", 188.75], ["2025-01-23", 282.39], ["2025-01-24", 308.48], ["2025-01-25", 501.19], ["2025-01-26", 70.25], ["2025-01-28", 245.3], ["2025-01-29", 128.75], ["2025-01-30", 117.75], ["2025-01-31", 376.98], ["2025-02-01", 42.75], ["2025-02-02", 481.8], ["2025-02-03", 222.75], ["2025-02-04", 207.5], ["2025-02-05", 241.74], ["2025-02-06", 170.68], ["2025-02-07", 152.69], ["2025-02-08", 482.0], ["2025-02-09", 178.7], ["2025-02-10", 448.25], ["2025-02-11", 325.78], ["2025-02-12", 155.7], ["2025-02-13", 528.45], ["2025-02-14", 440.3], ["2025-02-15", 829.36], ["2025-02-16", 291.45], ["2025-02-17", 334.23], ["2025-02-18", 268.76], ["2025-02-19", 443.1], ["2025-02-20", 412.8], ["2025-02-21", 414.1], ["2025-02-22", 204.54], ["2025-02-23", 293.35], ["2025-02-24", 477.87], ["2025-02-25", 256.1], ["2025-02-26", 677.15], ["2025-02-27", 238.51], ["2025-02-28", 363.49], ["2025-03-01", 437.6], ["2025-03-02", 638.9], ["2025-03-03", 423.72], ["2025-03-04", 238.77], ["2025-03-05", 373.75], ["2025-03-06", 322.7], ["2025-03-07", 861.71], ["2025-03-08", 349.4], ["2025-03-09", 607.68], ["2025-03-10", 520.1], ["2025-03-11", 599.34], ["2025-03-12", 352.0], ["2025-03-13", 848.65], ["2025-03-14", 236.3], ["2025-03-15", 287.75], ["2025-03-16", 156.25], ["2025-03-17", 553.5], ["2025-03-18", 356.1], ["2025-03-19", 780.72], ["2025-03-20", 570.35], ["2025-03-21", 859.48], ["2025-03-22", 709.11], ["2025-03-23", 623.67], ["2025-03-24", 1354.34], ["2025-03-25", 197.65], ["2025-03-26", 156.0], ["2025-03-27", 380.0], ["2025-03-28", 571.96], ["2025-03-29", 576.92], ["2025-03-30", 1043.7], ["2025-03-31", 180.25], ["2025-04-01", 515.75], ["2025-04-02", 1172.33], ["2025-04-03", 930.45], ["2025-04-04", 642.03], ["2025-04-05", 432.68], ["2025-04-06", 552.24], ["2025-04-07", 232.59], ["2025-04-08", 603.73], ["2025-04-09", 432.5], ["2025-04-10", 740.94], ["2025-04-11", 962.89], ["2025-04-12", 768.37], ["2025-04-13", 714.2], ["2025-04-14", 1003.86], ["2025-04-15", 679.72], ["2025-04-16", 756.02], ["2025-04-17", 434.05], ["2025-04-18", 1080.2], ["2025-04-19", 550.02], ["2025-04-20", 628.09], ["2025-04-21", 508.6], ["2025-04-22", 827.37], ["2025-04-23", 634.2], ["2025-04-24", 994.92], ["2025-04-25", 447.09], ["2025-04-26", 871.23], ["2025-04-27", 854.78], ["2025-04-28", 634.18], ["2025-04-29", 1405.36], ["2025-04-30", 578.7], ["2025-05-01", 525.83], ["2025-05-02", 716.88], ["2025-05-03", 1614.25], ["2025-05-04", 384.24], ["2025-05-05", 1082.77], ["2025-05-06", 1209.94], ["2025-05-07", 400.42], ["2025-05-08", 552.4], ["2025-05-09", 672.59], ["2025-05-10", 901.04], ["2025-05-11", 1243.12], ["2025-05-12", 1015.91], ["2025-05-13", 1097.03], ["2025-05-14", 1164.69], ["2025-05-15", 379.45], ["2025-05-16", 933.59], ["2025-05-17", 2050.94], ["2025-05-18", 977.85], ["2025-05-19", 1349.5], ["2025-05-20", 1182.2], ["2025-05-21", 1191.84], ["2025-05-22", 859.06], ["2025-05-23", 2003.12], ["2025-05-24", 668.42], ["2025-05-25", 1394.9], ["2025-05-26", 1133.73], ["2025-05-27", 663.32], ["2025-05-28", 618.27], ["2025-05-29", 1016.09], ["2025-05-30", 1051.65], ["2025-05-31", 1035.34], ["2025-06-01", 1700.77], ["2025-06-02", 1602.15], ["2025-06-03", 1336.87], ["2025-06-04", 1071.19], ["2025-06-05", 732.1], ["2025-06-06", 1080.29], ["2025-06-07", 1297.9], ["2025-06-08", 1364.19], ["2025-06-09", 978.3], ["2025-06-10", 1416.03], ["2025-06-11", 736.84], ["2025-06-12", 1390.63], ["2025-06-13", 1506.93], ["2025-06-14", 761.1], ["2025-06-15", 1314.15], ["2025-06-16", 1398.56], ["2025-06-17", 1305.37], ["2025-06-18", 1809.43], ["2025-06-19", 1564.07], ["2025-06-20", 707.03], ["2025-06-21", 902.85], ["2025-06-22", 1257.12], ["2025-06-23", 1394.56], ["2025-06-24", 1905.71], ["2025-06-25", 1558.7], ["2025-06-26", 1201.01], ["2025-06-27", 1224.4], ["2025-06-28", 1446.78], ["2025-06-29", 2289.52], ["2025-06-30", 1079.36], ["2025-07-01", 1125.16], ["2025-07-02", 1547.22], ["2025-07-03", 1458.92], ["2025-07-04", 1755.51], ["2025-07-05", 1422.53], ["2025-07-06", 1959.12], ["2025-07-07", 926.62], ["2025-07-08", 1349.92], ["2025-07-09", 866.79], ["2025-07-10", 1814.51], ["2025-07-11", 1504.06], ["2025-07-12", 1843.19], ["2025-07-13", 1697.97], ["2025-07-14", 1277.61], ["2025-07-15", 1976.78], ["2025-07-16", 1112.35], ["2025-07-17", 1840.18], ["2025-07-18", 2346.03], ["2025-07-19", 1717.44], ["2025-07-20", 1994.3], ["2025-07-21", 2124.17], ["2025-07-22", 1236.99], ["2025-07-23", 2353.45], ["2025-07-24", 1336.82], ["2025-07-25", 2373.19], ["2025-07-26", 1290.79], ["2025-07-27", 2188.22], ["2025-07-28", 1413.11], ["2025-07-29", 1078.32], ["2025-07-30", 1168.98], ["2025-07-31", 2153.87], ["2025-08-01", 1716.56], ["2025-08-02", 2347.22], ["2025-08-03", 2102.2], ["2025-08-04", 1180.55], ["2025-08-05", 2308.26], ["2025-08-06", 1767.58], ["2025-08-07", 1486.8], ["2025-08-08", 2163.17], ["2025-08-09", 1716.86], ["2025-08-10", 1685.63], ["2025-08-11", 2224.37], ["2025-08-12", 2159.47], ["2025-08-13", 1588.92], ["2025-08-14", 1387.67], ["2025-08-15", 2648.46], ["2025-08-16", 2450.36], ["2025-08-17", 2755.91], ["2025-08-18", 1462.93], ["2025-08-19", 1914.38], ["2025-08-20", 1632.08], ["2025-08-21", 2703.44], ["2025-08-22", 1847.9], ["2025-08-23", 2154.6], ["2025-08-24", 2315.82], ["2025-08-25", 1695.55], ["2025-08-26", 1485.05], ["2025-08-27", 1740.97], ["2025-08-28", 2909.03], ["2025-08-29", 2733.78], ["2025-08-30", 2307.21], ["2025-08-31", 1644.11], ["2025-09-01", 2937.43], ["2025-09-02", 2277.65], ["2025-09-03", 1832.38], ["2025-09-04", 3041.39], ["2025-09-05", 2033.2], ["2025-09-06", 2660.82], ["2025-09-07", 2448.6], ["2025-09-08", 1323.43], ["2025-09-09", 2591.57], ["2025-09-10", 1897.38], ["2025-09-11", 2219.48], ["2025-09-12", 1268.36], ["2025-09-13", 2410.55], ["2025-09-14", 1643.43], ["2025-09-15", 1810.58], ["2025-09-16", 1791.86], ["2025-09-17", 2425.88], ["2025-09-18", 2333.78], ["2025-09-19", 2643.71], ["2025-09-20", 2460.68], ["2025-09-21", 3243.0], ["2025-09-22", 1956.3], ["2025-09-23", 2311.63], ["2025-09-24", 1758.54], ["2025-09-25", 2067.1], ["2025-09-26", 2143.28], ["2025-09-27", 1996.11], ["2025-09-28", 1925.95], ["2025-09-29", 2457.15], ["2025-09-30", 3017.6], ["2025-10-01", 1731.55], ["2025-10-02", 2364.05], ["2025-10-03", 2445.14], ["2025-10-04", 2541.06], ["2025-10-05", 1850.88], ["2025-10-06", 1899.65], ["2025-10-07", 2563.79], ["2025-10-08", 2696.03], ["2025-10-09", 3551.19], ["2025-10-10", 1865.91], ["2025-10-11", 1881.02], ["2025-10-12", 2361.38], ["2025-10-13", 1561.25], ["2025-10-14", 2700.9], ["2025-10-15", 1969.44], ["2025-10-16", 1803.28], ["2025-10-17", 1852.88], ["2025-10-18", 2345.2], ["2025-10-19", 1750.51], ["2025-10-20", 2338.05], ["2025-10-21", 2068.51], ["2025-10-22", 1818.07], ["2025-10-23", 2814.53], ["2025-10-24", 2324.39], ["2025-10-25", 2836.98], ["2025-10-26", 1738.39], ["2025-10-27", 2156.04], ["2025-10-28", 2222.78], ["2025-10-29", 1445.41], ["2025-10-30", 1978.16], ["2025-10-31", 2090.74], ["2025-11-01", 1672.72], ["2025-11-02", 1680.2], ["2025-11-03", 1950.96], ["2025-11-04", 2366.27], ["2025-11-05", 2005.21], ["2025-11-06", 2173.94], ["2025-11-07", 2349.04], ["2025-11-08", 1991.18], ["2025-11-09", 1977.78], ["2025-11-10", 2014.13], ["2025-11-11", 2169.43], ["2025-11-12", 1602.68], ["2025-11-13", 2095.63], ["2025-11-14", 1751.47], ["2025-11-15", 1456.93], ["2025-11-16", 2753.69], ["2025-11-17", 1779.12], ["2025-11-18", 1827.2], ["2025-11-19", 2341.22], ["2025-11-20", 1808.53], ["2025-11-21", 2485.31], ["2025-11-22", 1956.33], ["2025-11-23", 2219.17], ["2025-11-24", 2284.35], ["2025-11-25", 1545.2], ["2025-11-26", 2508.64], ["2025-11-27", 1513.36], ["2025-11-28", 2424.09], ["2025-11-29", 2720.68], ["2025-11-30", 1518.04], ["2025-12-01", 2556.36], ["2025-12-02", 2352.66], ["2025-12-03", 2425.34], ["2025-12-04", 2181.54], ["2025-12-05", 1747.77], ["2025-12-06", 1342.63], ["2025-12-07", 1249.27], ["2025-12-08", 1657.84], ["2025-12-09", 1434.97], ["2025-12-10", 2693.87], ["2025-12-11", 2294.05], ["2025-12-12", 2435.64], ["2025-12-13", 2698.95], ["2025-12-14", 1927.29], ["2025-12-15", 1814.48], ["2025-12-16", 1202.88], ["2025-12-17", 1338.71], ["2025-12-18", 1799.08], ["2025-12-19", 1476.08], ["2025-12-20", 1764.97], ["2025-12-21", 2720.97], ["2025-12-22", 1699.28], ["2025-12-23", 1466.0], ["2025-12-24", 1446.36], ["2025-12-25", 2075.71], ["2025-12-26", 2224.38], ["2025-12-27", 1277.14], ["2025-12-28", 1087.13], ["2025-12-29", 1537.85], ["2025-12-30", 2289.28], ["2025-12-31", 2213.12], ["2026-01-01", 1793.29], ["2026-01-02", 1629.9], ["2026-01-03", 1210.87], ["2026-01-04", 1737.26], ["2026-01-05", 1771.35], ["2026-01-06", 2028.97], ["2026-01-07", 1651.91], ["2026-01-08", 2054.52], ["2026-01-09", 1706.61], ["2026-01-10", 1890.39], ["2026-01-11", 2053.39], ["2026-01-12", 969.72], ["2026-01-13", 1942.58], ["2026-01-14", 2417.3], ["2026-01-15", 1319.41], ["2026-01-16", 1600.06], ["2026-01-17", 2615.76], ["2026-01-18", 1850.16], ["2026-01-19", 2848.99], ["2026-01-20", 1623.25], ["2026-01-21", 1572.83], ["2026-01-22", 2639.51], ["2026-01-23", 1658.62], ["2026-01-24", 1263.98], ["2026-01-25", 1329.27], ["2026-01-26", 2324.83], ["2026-01-27", 2241.18], ["2026-01-28", 2373.25], ["2026-01-29", 1894.53], ["2026-01-30", 2340.5], ["2026-01-31", 934.42], ["2026-02-01", 1413.07], ["2026-02-02", 1176.19], ["2026-02-03", 1364.08], ["2026-02-04", 1207.37], ["2026-02-05", 1229.41], ["2026-02-06", 1136.78], ["2026-02-07", 1268.17], ["2026-02-08", 1499.88], ["2026-02-09", 2141.22], ["2026-02-10", 1358.4], ["2026-02-11", 1790.43], ["2026-02-12", 1407.99], ["2026-02-13", 1353.98], ["2026-02-14", 1131.8], ["2026-02-15", 672.42], ["2026-02-16", 1757.84], ["2026-02-17", 1790.39], ["2026-02-18", 1143.26], ["2026-02-19", 1079.34], ["2026-02-20", 1511.72], ["2026-02-21", 866.44], ["2026-02-22", 1624.31], ["2026-02-23", 1312.78], ["2026-02-24", 1114.33], ["2026-02-25", 1369.78], ["2026-02-26", 1760.22], ["2026-02-27", 1673.28], ["2026-02-28", 1533.1], ["2026-03-01", 1314.8], ["2026-03-02", 1033.98], ["2026-03-03", 700.69], ["2026-03-04", 1803.66], ["2026-03-05", 1017.99], ["2026-03-06", 1525.34], ["2026-03-07", 981.14], ["2026-03-08", 1251.57], ["2026-03-09", 703.61], ["2026-03-10", 894.0], ["2026-03-11", 978.67], ["2026-03-12", 1070.48], ["2026-03-13", 1377.24], ["2026-03-14", 1216.34], ["2026-03-15", 769.53], ["2026-03-16", 485.2], ["2026-03-17", 989.18], ["2026-03-18", 979.15], ["2026-03-19", 999.84], ["2026-03-20", 1370.39], ["2026-03-21", 551.73], ["2026-03-22", 1152.73], ["2026-03-23", 1525.99], ["2026-03-24", 458.09], ["2026-03-25", 644.03], ["2026-03-26", 991.16], ["2026-03-27", 1019.7], ["2026-03-28", 554.69], ["2026-03-29", 1123.32], ["2026-03-30", 629.4], ["2026-03-31", 392.74], ["2026-04-01", 910.01], ["2026-04-02", 677.96], ["2026-04-03", 1103.62], ["2026-04-04", 1739.52], ["2026-04-05", 1055.58], ["2026-04-06", 953.46], ["2026-04-07", 1410.59], ["2026-04-08", 958.6], ["2026-04-09", 654.67], ["2026-04-10", 634.15], ["2026-04-11", 1344.19], ["2026-04-12", 746.31], ["2026-04-13", 875.9], ["2026-04-14", 831.32], ["2026-04-15", 321.24], ["2026-04-16", 681.7], ["2026-04-17", 739.9], ["2026-04-18", 822.85], ["2026-04-19", 786.58], ["2026-04-20", 546.35], ["2026-04-21", 1083.58], ["2026-04-22", 625.6], ["2026-04-23", 601.66], ["2026-04-24", 431.78], ["2026-04-25", 791.43], ["2026-04-26", 1208.44], ["2026-04-27", 337.99], ["2026-04-28", 498.6], ["2026-04-29", 779.53], ["2026-04-30", 474.25], ["2026-05-01", 771.17], ["2026-05-02", 305.0], ["2026-05-03", 811.49], ["2026-05-04", 743.95], ["2026-05-05", 270.0], ["2026-05-06", 685.14], ["2026-05-07", 474.01], ["2026-05-08", 1301.97], ["2026-05-09", 1515.07], ["2026-05-10", 640.44], ["2026-05-11", 826.66], ["2026-05-12", 728.4], ["2026-05-13", 750.43], ["2026-05-14", 120.5], ["2026-05-15", 1110.18], ["2026-05-16", 624.0], ["2026-05-17", 342.5], ["2026-05-18", 409.52], ["2026-05-19", 466.4], ["2026-05-20", 850.42], ["2026-05-21", 84.5], ["2026-05-22", 946.02], ["2026-05-23", 375.45], ["2026-05-24", 238.67], ["2026-05-25", 150.0], ["2026-05-26", 254.69], ["2026-05-27", 565.14], ["2026-05-28", 761.09], ["2026-05-29", 314.8], ["2026-05-30", 321.23], ["2026-05-31", 381.64], ["2026-06-01", 499.0], ["2026-06-02", 413.54], ["2026-06-03", 464.41], ["2026-06-04", 254.65], ["2026-06-05", 262.09], ["2026-06-06", 449.4], ["2026-06-07", 471.25], ["2026-06-08", 237.19], ["2026-06-09", 381.58], ["2026-06-10", 278.8], ["2026-06-11", 250.74], ["2026-06-12", 439.58], ["2026-06-13", 421.29], ["2026-06-14", 181.74], ["2026-06-15", 675.15], ["2026-06-16", 989.7], ["2026-06-17", 400.25], ["2026-06-18", 385.2], ["2026-06-19", 349.4], ["2026-06-20", 115.35], ["2026-06-21", 426.99], ["2026-06-22", 647.39], ["2026-06-23", 342.0], ["2026-06-24", 340.85], ["2026-06-25", 475.39], ["2026-06-26", 314.61], ["2026-06-27", 106.75], ["2026-06-28", 483.82], ["2026-06-29", 672.36], ["2026-06-30", 35.75], ["2026-07-01", 175.9], ["2026-07-02", 352.89], ["2026-07-03", 276.3], ["2026-07-05", 335.25], ["2026-07-06", 213.5], ["2026-07-07", 64.79], ["2026-07-08", 139.75], ["2026-07-09", 55.75], ["2026-07-10", 556.15], ["2026-07-11", 34.75], ["2026-07-12", 133.3], ["2026-07-13", 60.99], ["2026-07-14", 277.6], ["2026-07-16", 216.95], ["2026-07-17", 87.0], ["2026-07-18", 138.1], ["2026-07-19", 242.75], ["2026-07-20", 143.5], ["2026-07-21", 269.25], ["2026-07-22", 190.49], ["2026-07-24", 121.5], ["2026-07-25", 422.95], ["2026-07-26", 118.0], ["2026-07-28", 160.2], ["2026-07-30", 369.53], ["2026-07-31", 59.25], ["2026-08-02", 161.5], ["2026-08-03", 200.6], ["2026-08-04", 77.1], ["2026-08-05", 255.24], ["2026-08-06", 22.5], ["2026-08-07", 300.69], ["2026-08-08", 82.8], ["2026-08-09", 80.25], ["2026-08-10", 90.25], ["2026-08-11", 64.5], ["2026-08-12", 36.0], ["2026-08-14", 69.0], ["2026-08-15", 331.16], ["2026-08-16", 45.0], ["2026-08-17", 85.5], ["2026-08-19", 79.98], ["2026-08-20", 318.7], ["2026-08-23", 127.24], ["2026-08-25", 221.25], ["2026-08-27", 31.8], ["2026-08-29", 21.0], ["2026-09-01", 154.0], ["2026-09-02", 115.98], ["2026-09-14", 81.6], ["2026-09-15", 14.25], ["2026-09-18", 29.99], ["2026-09-25", 38.5]], "STORE4": [["2024-11-16", 25.99], ["2024-11-19", 40.8], ["2024-11-25", 167.97], ["2024-11-26", 71.75], ["2024-12-04", 122.4], ["2024-12-05", 80.39], ["2024-12-06", 30.25], ["2024-12-07", 263.25], ["2024-12-08", 107.25], ["2024-12-11", 58.0], ["2024-12-12", 98.0], ["2024-12-13", 57.75], ["2024-12-14", 27.5], ["2024-12-17", 47.0], ["2024-12-19", 258.6], ["2024-12-20", 217.8], ["2024-12-21", 26.99], ["2024-12-23", 61.5], ["2024-12-24", 124.99], ["2024-12-26", 164.5], ["2024-12-27", 152.75], ["2024-12-29", 48.5], ["2024-12-30", 47.4], ["2024-12-31", 82.29], ["2025-01-01", 127.3], ["2025-01-02", 71.5], ["2025-01-03", 115.0], ["2025-01-04", 123.96], ["2025-01-05", 68.39], ["2025-01-06", 141.6], ["2025-01-07", 45.75], ["2025-01-08", 119.24], ["2025-01-09", 212.9], ["2025-01-10", 222.55], ["2025-01-11", 271.5], ["2025-01-12", 199.25], ["2025-01-13", 45.6], ["2025-01-14", 239.25], ["2025-01-15", 40.75], ["2025-01-16", 140.25], ["2025-01-18", 272.74], ["2025-01-19", 154.19], ["2025-01-20", 359.1], ["2025-01-21", 223.75], ["2025-01-22", 445.58], ["2025-01-23", 417.69], ["2025-01-24", 360.0], ["2025-01-25", 461.8], ["2025-01-26", 187.73], ["2025-01-27", 89.98], ["2025-01-28", 315.0], ["2025-01-29", 76.8], ["2025-01-30", 106.5], ["2025-01-31", 319.19], ["2025-02-01", 303.18], ["2025-02-02", 475.0], ["2025-02-03", 335.05], ["2025-02-04", 494.25], ["2025-02-05", 180.4], ["2025-02-06", 635.7], ["2025-02-07", 20.5], ["2025-02-08", 207.85], ["2025-02-09", 340.83], ["2025-02-10", 263.38], ["2025-02-11", 367.8], ["2025-02-12", 42.3], ["2025-02-13", 592.56], ["2025-02-14", 598.91], ["2025-02-15", 393.68], ["2025-02-16", 234.99], ["2025-02-17", 309.78], ["2025-02-18", 365.75], ["2025-02-19", 239.35], ["2025-02-20", 269.04], ["2025-02-21", 484.09], ["2025-02-22", 288.54], ["2025-02-23", 309.22], ["2025-02-24", 576.27], ["2025-02-25", 351.85], ["2025-02-26", 294.5], ["2025-02-27", 295.49], ["2025-02-28", 191.0], ["2025-03-01", 125.65], ["2025-03-02", 260.99], ["2025-03-03", 356.4], ["2025-03-04", 253.2], ["2025-03-05", 283.68], ["2025-03-06", 263.17], ["2025-03-07", 147.25], ["2025-03-08", 529.34], ["2025-03-09", 609.29], ["2025-03-10", 131.75], ["2025-03-11", 357.19], ["2025-03-12", 574.4], ["2025-03-13", 396.89], ["2025-03-14", 672.24], ["2025-03-15", 870.57], ["2025-03-16", 869.19], ["2025-03-17", 541.98], ["2025-03-18", 351.1], ["2025-03-19", 494.5], ["2025-03-20", 364.62], ["2025-03-21", 715.94], ["2025-03-22", 473.29], ["2025-03-23", 535.47], ["2025-03-24", 597.15], ["2025-03-25", 543.24], ["2025-03-26", 308.04], ["2025-03-27", 499.23], ["2025-03-28", 508.33], ["2025-03-29", 655.44], ["2025-03-30", 1057.06], ["2025-03-31", 135.75], ["2025-04-01", 352.43], ["2025-04-02", 515.89], ["2025-04-03", 407.2], ["2025-04-04", 795.64], ["2025-04-05", 1114.03], ["2025-04-06", 931.29], ["2025-04-07", 418.7], ["2025-04-08", 558.32], ["2025-04-09", 405.02], ["2025-04-10", 984.25], ["2025-04-11", 1438.59], ["2025-04-12", 864.18], ["2025-04-13", 446.24], ["2025-04-14", 1295.66], ["2025-04-15", 894.7], ["2025-04-16", 1181.84], ["2025-04-17", 812.32], ["2025-04-18", 1124.12], ["2025-04-19", 603.05], ["2025-04-20", 518.19], ["2025-04-21", 1158.39], ["2025-04-22", 392.08], ["2025-04-23", 1004.65], ["2025-04-24", 1915.84], ["2025-04-25", 751.38], ["2025-04-26", 1104.98], ["2025-04-27", 1134.7], ["2025-04-28", 875.39], ["2025-04-29", 1013.44], ["2025-04-30", 730.7], ["2025-05-01", 932.6], ["2025-05-02", 575.37], ["2025-05-03", 1551.48], ["2025-05-04", 1256.53], ["2025-05-05", 856.78], ["2025-05-06", 560.74], ["2025-05-07", 1249.18], ["2025-05-08", 599.24], ["2025-05-09", 1230.12], ["2025-05-10", 1039.4], ["2025-05-11", 1824.86], ["2025-05-12", 672.04], ["2025-05-13", 270.88], ["2025-05-14", 1099.81], ["2025-05-15", 1165.72], ["2025-05-16", 671.23], ["2025-05-17", 1709.4], ["2025-05-18", 1240.69], ["2025-05-19", 1354.91], ["2025-05-20", 1219.01], ["2025-05-21", 1109.8], ["2025-05-22", 1191.77], ["2025-05-23", 1011.38], ["2025-05-24", 1416.87], ["2025-05-25", 1501.94], ["2025-05-26", 1665.95], ["2025-05-27", 1216.23], ["2025-05-28", 1682.68], ["2025-05-29", 894.32], ["2025-05-30", 1155.54], ["2025-05-31", 1017.98], ["2025-06-01", 1983.58], ["2025-06-02", 1614.58], ["2025-06-03", 1183.83], ["2025-06-04", 1944.97], ["2025-06-05", 876.54], ["2025-06-06", 2333.75], ["2025-06-07", 1509.2], ["2025-06-08", 1117.25], ["2025-06-09", 2167.59], ["2025-06-10", 1594.2], ["2025-06-11", 1074.64], ["2025-06-12", 1486.62], ["2025-06-13", 1254.4], ["2025-06-14", 2017.48], ["2025-06-15", 2371.0], ["2025-06-16", 1179.15], ["2025-06-17", 2159.52], ["2025-06-18", 1343.89], ["2025-06-19", 1763.6], ["2025-06-20", 1428.92], ["2025-06-21", 2001.54], ["2025-06-22", 1192.05], ["2025-06-23", 1344.24], ["2025-06-24", 1564.53], ["2025-06-25", 582.68], ["2025-06-26", 2169.81], ["2025-06-27", 1106.94], ["2025-06-28", 1267.44], ["2025-06-29", 1731.17], ["2025-06-30", 1469.59], ["2025-07-01", 2383.81], ["2025-07-02", 1111.26], ["2025-07-03", 1166.91], ["2025-07-04", 1179.89], ["2025-07-05", 2198.88], ["2025-07-06", 1348.28], ["2025-07-07", 2091.11], ["2025-07-08", 1115.37], ["2025-07-09", 2025.33], ["2025-07-10", 1410.33], ["2025-07-11", 2091.0], ["2025-07-12", 1849.22], ["2025-07-13", 2531.69], ["2025-07-14", 1875.06], ["2025-07-15", 1245.35], ["2025-07-16", 2388.74], ["2025-07-17", 1613.84], ["2025-07-18", 2400.82], ["2025-07-19", 2335.53], ["2025-07-20", 1627.67], ["2025-07-21", 2599.95], ["2025-07-22", 2721.29], ["2025-07-23", 2253.25], ["2025-07-24", 2712.09], ["2025-07-25", 2953.69], ["2025-07-26", 2484.47], ["2025-07-27", 1927.36], ["2025-07-28", 1552.32], ["2025-07-29", 2256.26], ["2025-07-30", 2300.72], ["2025-07-31", 2441.24], ["2025-08-01", 1651.48], ["2025-08-02", 1779.93], ["2025-08-03", 3164.5], ["2025-08-04", 2200.96], ["2025-08-05", 1774.85], ["2025-08-06", 1420.95], ["2025-08-07", 3059.34], ["2025-08-08", 2829.19], ["2025-08-09", 2126.85], ["2025-08-10", 1940.74], ["2025-08-11", 2569.75], ["2025-08-12", 1215.29], ["2025-08-13", 2310.32], ["2025-08-14", 2343.0], ["2025-08-15", 2368.07], ["2025-08-16", 2033.92], ["2025-08-17", 2222.25], ["2025-08-18", 2834.15], ["2025-08-19", 2464.01], ["2025-08-20", 1800.59], ["2025-08-21", 2725.03], ["2025-08-22", 2358.51], ["2025-08-23", 2036.22], ["2025-08-24", 3226.69], ["2025-08-25", 1893.36], ["2025-08-26", 2337.69], ["2025-08-27", 1859.08], ["2025-08-28", 2676.23], ["2025-08-29", 1955.64], ["2025-08-30", 1971.78], ["2025-08-31", 3107.22], ["2025-09-01", 2780.18], ["2025-09-02", 2013.33], ["2025-09-03", 1879.86], ["2025-09-04", 2167.21], ["2025-09-05", 2292.11], ["2025-09-06", 2142.79], ["2025-09-07", 2266.67], ["2025-09-08", 1833.14], ["2025-09-09", 1752.05], ["2025-09-10", 2552.18], ["2025-09-11", 3109.43], ["2025-09-12", 2858.96], ["2025-09-13", 2670.41], ["2025-09-14", 1813.87], ["2025-09-15", 2561.96], ["2025-09-16", 2745.1], ["2025-09-17", 2360.45], ["2025-09-18", 3301.15], ["2025-09-19", 1829.89], ["2025-09-20", 2695.65], ["2025-09-21", 3303.44], ["2025-09-22", 2945.35], ["2025-09-23", 1863.34], ["2025-09-24", 2633.47], ["2025-09-25", 2743.22], ["2025-09-26", 2276.09], ["2025-09-27", 2358.45], ["2025-09-28", 2755.85], ["2025-09-29", 2068.97], ["2025-09-30", 2273.98], ["2025-10-01", 2118.89], ["2025-10-02", 2026.28], ["2025-10-03", 2009.33], ["2025-10-04", 2510.63], ["2025-10-05", 2591.13], ["2025-10-06", 2612.36], ["2025-10-07", 2563.9], ["2025-10-08", 2598.17], ["2025-10-09", 1506.58], ["2025-10-10", 1502.59], ["2025-10-11", 1392.87], ["2025-10-12", 3231.95], ["2025-10-13", 1656.14], ["2025-10-14", 3249.58], ["2025-10-15", 3004.61], ["2025-10-16", 2726.27], ["2025-10-17", 1459.29], ["2025-10-18", 2694.8], ["2025-10-19", 2475.75], ["2025-10-20", 1936.34], ["2025-10-21", 2658.07], ["2025-10-22", 2281.58], ["2025-10-23", 1964.01], ["2025-10-24", 1633.29], ["2025-10-25", 2522.56], ["2025-10-26", 2371.66], ["2025-10-27", 2786.61], ["2025-10-28", 2242.22], ["2025-10-29", 1675.51], ["2025-10-30", 1915.64], ["2025-10-31", 2494.02], ["2025-11-01", 2781.57], ["2025-11-02", 2086.48], ["2025-11-03", 1660.68], ["2025-11-04", 2133.69], ["2025-11-05", 2787.82], ["2025-11-06", 3057.78], ["2025-11-07", 1630.98], ["2025-11-08", 2198.77], ["2025-11-09", 2638.69], ["2025-11-10", 2574.16], ["2025-11-11", 2083.35], ["2025-11-12", 1788.4], ["2025-11-13", 3401.08], ["2025-11-14", 2129.16], ["2025-11-15", 2052.16], ["2025-11-16", 2509.91], ["2025-11-17", 3818.3], ["2025-11-18", 2232.14], ["2025-11-19", 1975.63], ["2025-11-20", 3064.28], ["2025-11-21", 2540.5], ["2025-11-22", 3118.72], ["2025-11-23", 1388.47], ["2025-11-24", 4372.47], ["2025-11-25", 2009.06], ["2025-11-26", 2653.74], ["2025-11-27", 2734.3], ["2025-11-28", 3444.83], ["2025-11-29", 1741.29], ["2025-11-30", 1998.53], ["2025-12-01", 1865.67], ["2025-12-02", 2521.49], ["2025-12-03", 2541.28], ["2025-12-04", 1987.06], ["2025-12-05", 1792.58], ["2025-12-06", 2372.73], ["2025-12-07", 1537.99], ["2025-12-08", 2971.2], ["2025-12-09", 2675.22], ["2025-12-10", 1837.35], ["2025-12-11", 2302.91], ["2025-12-12", 2032.74], ["2025-12-13", 2809.0], ["2025-12-14", 2685.63], ["2025-12-15", 2281.96], ["2025-12-16", 1730.54], ["2025-12-17", 2120.01], ["2025-12-18", 1386.37], ["2025-12-19", 2452.98], ["2025-12-20", 3212.43], ["2025-12-21", 2652.94], ["2025-12-22", 2880.0], ["2025-12-23", 3164.17], ["2025-12-24", 1834.13], ["2025-12-25", 2051.4], ["2025-12-26", 2367.96], ["2025-12-27", 2876.0], ["2025-12-28", 2341.51], ["2025-12-29", 2159.76], ["2025-12-30", 2143.7], ["2025-12-31", 1821.77], ["2026-01-01", 2129.43], ["2026-01-02", 2125.72], ["2026-01-03", 1365.88], ["2026-01-04", 1619.1], ["2026-01-05", 1992.34], ["2026-01-06", 2417.0], ["2026-01-07", 2949.02], ["2026-01-08", 2364.46], ["2026-01-09", 2727.68], ["2026-01-10", 2604.02], ["2026-01-11", 2650.27], ["2026-01-12", 1647.37], ["2026-01-13", 2750.08], ["2026-01-14", 2200.94], ["2026-01-15", 1805.62], ["2026-01-16", 2244.19], ["2026-01-17", 1339.77], ["2026-01-18", 2488.11], ["2026-01-19", 2515.82], ["2026-01-20", 2294.25], ["2026-01-21", 1220.59], ["2026-01-22", 1663.85], ["2026-01-23", 1514.46], ["2026-01-24", 1626.09], ["2026-01-25", 1734.83], ["2026-01-26", 2287.18], ["2026-01-27", 1655.01], ["2026-01-28", 1635.17], ["2026-01-29", 1750.4], ["2026-01-30", 1849.61], ["2026-01-31", 1198.84], ["2026-02-01", 2843.49], ["2026-02-02", 2525.13], ["2026-02-03", 2019.41], ["2026-02-04", 1931.05], ["2026-02-05", 1702.73], ["2026-02-06", 1434.82], ["2026-02-07", 1379.22], ["2026-02-08", 1057.56], ["2026-02-09", 1698.61], ["2026-02-10", 1102.43], ["2026-02-11", 1465.35], ["2026-02-12", 1511.15], ["2026-02-13", 1842.98], ["2026-02-14", 2484.39], ["2026-02-15", 1757.04], ["2026-02-16", 2582.84], ["2026-02-17", 1185.52], ["2026-02-18", 1708.6], ["2026-02-19", 1684.95], ["2026-02-20", 1447.98], ["2026-02-21", 2394.3], ["2026-02-22", 1644.03], ["2026-02-23", 1208.33], ["2026-02-24", 1524.43], ["2026-02-25", 997.09], ["2026-02-26", 1834.13], ["2026-02-27", 1089.59], ["2026-02-28", 807.44], ["2026-03-01", 1366.04], ["2026-03-02", 1684.36], ["2026-03-03", 1057.43], ["2026-03-04", 883.52], ["2026-03-05", 1224.68], ["2026-03-06", 1070.62], ["2026-03-07", 1507.95], ["2026-03-08", 1861.86], ["2026-03-09", 2307.28], ["2026-03-10", 2308.08], ["2026-03-11", 1244.22], ["2026-03-12", 1073.39], ["2026-03-13", 1630.35], ["2026-03-14", 1307.9], ["2026-03-15", 1533.17], ["2026-03-16", 1378.13], ["2026-03-17", 1008.19], ["2026-03-18", 1555.78], ["2026-03-19", 869.69], ["2026-03-20", 1063.04], ["2026-03-21", 801.38], ["2026-03-22", 1176.71], ["2026-03-23", 1256.21], ["2026-03-24", 1225.95], ["2026-03-25", 1134.58], ["2026-03-26", 1023.8], ["2026-03-27", 893.59], ["2026-03-28", 1247.72], ["2026-03-29", 939.81], ["2026-03-30", 1095.4], ["2026-03-31", 1035.38], ["2026-04-01", 1067.64], ["2026-04-02", 1493.04], ["2026-04-03", 933.77], ["2026-04-04", 1277.24], ["2026-04-05", 1097.65], ["2026-04-06", 1101.03], ["2026-04-07", 531.44], ["2026-04-08", 918.68], ["2026-04-09", 464.14], ["2026-04-10", 707.22], ["2026-04-11", 740.24], ["2026-04-12", 450.04], ["2026-04-13", 1253.8], ["2026-04-14", 959.8], ["2026-04-15", 803.14], ["2026-04-16", 576.86], ["2026-04-17", 705.66], ["2026-04-18", 810.62], ["2026-04-19", 1173.95], ["2026-04-20", 549.73], ["2026-04-21", 589.78], ["2026-04-22", 280.07], ["2026-04-23", 848.22], ["2026-04-24", 1443.35], ["2026-04-25", 661.98], ["2026-04-26", 1504.15], ["2026-04-27", 647.49], ["2026-04-28", 1377.44], ["2026-04-29", 746.85], ["2026-04-30", 828.06], ["2026-05-01", 1243.6], ["2026-05-02", 652.8], ["2026-05-03", 590.46], ["2026-05-04", 688.05], ["2026-05-05", 1153.12], ["2026-05-06", 1089.63], ["2026-05-07", 382.4], ["2026-05-08", 314.39], ["2026-05-09", 1149.38], ["2026-05-10", 968.27], ["2026-05-11", 387.99], ["2026-05-12", 545.03], ["2026-05-13", 543.48], ["2026-05-14", 569.38], ["2026-05-15", 395.94], ["2026-05-16", 820.55], ["2026-05-17", 221.04], ["2026-05-18", 262.85], ["2026-05-19", 523.49], ["2026-05-20", 567.49], ["2026-05-21", 1142.39], ["2026-05-22", 687.79], ["2026-05-23", 733.77], ["2026-05-24", 844.1], ["2026-05-25", 366.94], ["2026-05-26", 148.59], ["2026-05-27", 878.73], ["2026-05-28", 718.25], ["2026-05-29", 616.94], ["2026-05-30", 390.89], ["2026-05-31", 633.55], ["2026-06-01", 442.49], ["2026-06-02", 578.38], ["2026-06-03", 561.93], ["2026-06-04", 1197.0], ["2026-06-05", 335.9], ["2026-06-06", 482.79], ["2026-06-07", 429.07], ["2026-06-08", 324.6], ["2026-06-09", 395.05], ["2026-06-10", 84.0], ["2026-06-11", 340.24], ["2026-06-12", 802.64], ["2026-06-13", 353.2], ["2026-06-14", 491.45], ["2026-06-15", 350.99], ["2026-06-16", 669.7], ["2026-06-17", 255.95], ["2026-06-18", 515.85], ["2026-06-19", 539.55], ["2026-06-20", 195.23], ["2026-06-21", 280.1], ["2026-06-22", 24.75], ["2026-06-23", 222.58], ["2026-06-24", 112.0], ["2026-06-25", 165.5], ["2026-06-26", 462.25], ["2026-06-27", 406.84], ["2026-06-28", 215.0], ["2026-06-29", 26.7], ["2026-06-30", 175.79], ["2026-07-01", 87.6], ["2026-07-02", 570.78], ["2026-07-03", 265.39], ["2026-07-04", 106.0], ["2026-07-05", 137.9], ["2026-07-06", 74.5], ["2026-07-07", 154.44], ["2026-07-08", 136.0], ["2026-07-09", 69.25], ["2026-07-10", 189.84], ["2026-07-11", 64.5], ["2026-07-12", 87.5], ["2026-07-14", 303.59], ["2026-07-15", 180.9], ["2026-07-16", 93.0], ["2026-07-17", 592.8], ["2026-07-18", 354.75], ["2026-07-19", 254.75], ["2026-07-20", 86.0], ["2026-07-21", 231.75], ["2026-07-22", 226.3], ["2026-07-23", 76.0], ["2026-07-24", 65.0], ["2026-07-25", 84.89], ["2026-07-26", 557.3], ["2026-07-27", 129.75], ["2026-07-28", 141.78], ["2026-07-29", 30.6], ["2026-07-30", 132.25], ["2026-07-31", 248.4], ["2026-08-01", 625.95], ["2026-08-02", 63.75], ["2026-08-03", 101.49], ["2026-08-04", 163.99], ["2026-08-05", 690.1], ["2026-08-06", 34.0], ["2026-08-07", 25.25], ["2026-08-09", 230.55], ["2026-08-10", 171.55], ["2026-08-11", 38.5], ["2026-08-12", 69.5], ["2026-08-13", 14.0], ["2026-08-14", 62.0], ["2026-08-15", 86.0], ["2026-08-16", 51.59], ["2026-08-17", 369.0], ["2026-08-20", 106.25], ["2026-08-23", 60.5], ["2026-08-24", 68.99], ["2026-08-26", 26.4], ["2026-08-27", 83.77], ["2026-08-29", 89.4], ["2026-09-01", 30.0], ["2026-09-02", 36.25], ["2026-09-03", 20.39], ["2026-09-06", 113.09], ["2026-09-07", 71.0], ["2026-09-09", 66.25], ["2026-09-10", 38.5], ["2026-09-14", 47.98], ["2026-09-17", 73.2], ["2026-09-18", 64.0]], "STORE5": [["2024-11-10", 25.0], ["2024-11-16", 83.1], ["2024-11-23", 16.8], ["2024-11-29", 142.0], ["2024-11-30", 81.79], ["2024-12-01", 67.0], ["2024-12-04", 75.5], ["2024-12-09", 43.99], ["2024-12-10", 51.6], ["2024-12-12", 156.75], ["2024-12-14", 42.0], ["2024-12-16", 50.4], ["2024-12-20", 44.5], ["2024-12-21", 20.0], ["2024-12-23", 60.5], ["2024-12-25", 128.25], ["2024-12-26", 122.4], ["2024-12-27", 23.25], ["2024-12-28", 154.2], ["2024-12-29", 130.5], ["2024-12-31", 198.6], ["2025-01-01", 76.0], ["2025-01-02", 186.0], ["2025-01-05", 102.3], ["2025-01-07", 38.94], ["2025-01-08", 42.25], ["2025-01-09", 151.0], ["2025-01-10", 345.69], ["2025-01-11", 175.75], ["2025-01-12", 119.1], ["2025-01-13", 132.85], ["2025-01-14", 444.0], ["2025-01-15", 52.5], ["2025-01-17", 381.78], ["2025-01-18", 402.05], ["2025-01-19", 174.0], ["2025-01-20", 107.1], ["2025-01-21", 283.34], ["2025-01-22", 142.5], ["2025-01-23", 226.3], ["2025-01-24", 114.8], ["2025-01-25", 238.35], ["2025-01-26", 46.5], ["2025-01-27", 268.8], ["2025-01-28", 449.99], ["2025-01-29", 619.19], ["2025-01-30", 313.25], ["2025-01-31", 134.7], ["2025-02-01", 112.25], ["2025-02-02", 147.8], ["2025-02-03", 553.65], ["2025-02-04", 224.25], ["2025-02-05", 359.18], ["2025-02-06", 270.75], ["2025-02-07", 300.03], ["2025-02-08", 535.24], ["2025-02-10", 67.75], ["2025-02-12", 320.6], ["2025-02-13", 154.75], ["2025-02-14", 122.4], ["2025-02-15", 129.6], ["2025-02-16", 718.9], ["2025-02-17", 404.25], ["2025-02-18", 424.3], ["2025-02-19", 470.19], ["2025-02-20", 556.25], ["2025-02-21", 847.05], ["2025-02-22", 532.14], ["2025-02-23", 223.23], ["2025-02-24", 215.5], ["2025-02-25", 268.9], ["2025-02-26", 183.6], ["2025-02-27", 647.47], ["2025-02-28", 435.89], ["2025-03-01", 169.1], ["2025-03-02", 195.25], ["2025-03-03", 356.88], ["2025-03-04", 591.78], ["2025-03-05", 250.7], ["2025-03-06", 987.64], ["2025-03-07", 98.0], ["2025-03-08", 381.88], ["2025-03-09", 268.75], ["2025-03-10", 737.7], ["2025-03-11", 401.8], ["2025-03-12", 190.4], ["2025-03-13", 880.22], ["2025-03-14", 541.58], ["2025-03-15", 688.2], ["2025-03-16", 313.07], ["2025-03-17", 1063.3], ["2025-03-18", 208.45], ["2025-03-19", 292.88], ["2025-03-20", 1232.72], ["2025-03-21", 279.3], ["2025-03-22", 1275.91], ["2025-03-23", 781.08], ["2025-03-24", 642.48], ["2025-03-25", 317.63], ["2025-03-26", 1035.89], ["2025-03-27", 604.5], ["2025-03-28", 361.99], ["2025-03-29", 817.39], ["2025-03-30", 818.55], ["2025-03-31", 832.9], ["2025-04-01", 965.49], ["2025-04-02", 857.65], ["2025-04-03", 823.7], ["2025-04-04", 294.39], ["2025-04-05", 867.53], ["2025-04-06", 283.64], ["2025-04-07", 516.18], ["2025-04-08", 716.25], ["2025-04-09", 230.09], ["2025-04-10", 966.49], ["2025-04-11", 643.55], ["2025-04-12", 728.74], ["2025-04-13", 367.84], ["2025-04-14", 613.65], ["2025-04-15", 914.78], ["2025-04-16", 1035.69], ["2025-04-17", 571.67], ["2025-04-18", 485.74], ["2025-04-19", 712.13], ["2025-04-20", 760.3], ["2025-04-21", 569.85], ["2025-04-22", 477.99], ["2025-04-23", 531.25], ["2025-04-24", 278.5], ["2025-04-25", 802.49], ["2025-04-26", 1123.44], ["2025-04-27", 454.46], ["2025-04-28", 789.33], ["2025-04-29", 623.63], ["2025-04-30", 908.11], ["2025-05-01", 379.59], ["2025-05-02", 754.35], ["2025-05-03", 837.09], ["2025-05-04", 803.14], ["2025-05-05", 1030.99], ["2025-05-06", 1081.16], ["2025-05-07", 746.57], ["2025-05-08", 747.78], ["2025-05-09", 653.65], ["2025-05-10", 618.44], ["2025-05-11", 1837.3], ["2025-05-12", 1051.99], ["2025-05-13", 1330.81], ["2025-05-14", 404.17], ["2025-05-15", 1015.81], ["2025-05-16", 1182.72], ["2025-05-17", 739.85], ["2025-05-18", 1327.52], ["2025-05-19", 946.45], ["2025-05-20", 1447.67], ["2025-05-21", 1293.55], ["2025-05-22", 1141.14], ["2025-05-23", 1355.45], ["2025-05-24", 1052.93], ["2025-05-25", 1203.44], ["2025-05-26", 1925.69], ["2025-05-27", 820.5], ["2025-05-28", 449.49], ["2025-05-29", 943.83], ["2025-05-30", 917.43], ["2025-05-31", 1314.59], ["2025-06-01", 757.39], ["2025-06-02", 1187.35], ["2025-06-03", 1319.29], ["2025-06-04", 965.44], ["2025-06-05", 1703.94], ["2025-06-06", 1363.73], ["2025-06-07", 1458.11], ["2025-06-08", 1070.23], ["2025-06-09", 951.49], ["2025-06-10", 1465.12], ["2025-06-11", 1513.9], ["2025-06-12", 1387.78], ["2025-06-13", 1276.04], ["2025-06-14", 1756.47], ["2025-06-15", 1479.74], ["2025-06-16", 1477.68], ["2025-06-17", 869.63], ["2025-06-18", 1832.19], ["2025-06-19", 1461.47], ["2025-06-20", 1563.34], ["2025-06-21", 1089.29], ["2025-06-22", 1331.03], ["2025-06-23", 1573.15], ["2025-06-24", 843.84], ["2025-06-25", 1557.46], ["2025-06-26", 1878.67], ["2025-06-27", 1818.52], ["2025-06-28", 2382.94], ["2025-06-29", 1703.41], ["2025-06-30", 1285.83], ["2025-07-01", 1113.76], ["2025-07-02", 1582.76], ["2025-07-03", 1554.02], ["2025-07-04", 989.72], ["2025-07-05", 1229.2], ["2025-07-06", 1637.06], ["2025-07-07", 1289.55], ["2025-07-08", 1995.25], ["2025-07-09", 675.53], ["2025-07-10", 1708.24], ["2025-07-11", 1491.13], ["2025-07-12", 2250.46], ["2025-07-13", 2217.76], ["2025-07-14", 2577.0], ["2025-07-15", 1141.28], ["2025-07-16", 1092.11], ["2025-07-17", 1783.23], ["2025-07-18", 1272.22], ["2025-07-19", 1760.16], ["2025-07-20", 1527.85], ["2025-07-21", 722.98], ["2025-07-22", 2060.87], ["2025-07-23", 1707.07], ["2025-07-24", 1546.83], ["2025-07-25", 2025.13], ["2025-07-26", 1302.91], ["2025-07-27", 2745.73], ["2025-07-28", 2664.93], ["2025-07-29", 2490.85], ["2025-07-30", 1745.1], ["2025-07-31", 1855.97], ["2025-08-01", 1680.24], ["2025-08-02", 2130.68], ["2025-08-03", 1902.19], ["2025-08-04", 2202.04], ["2025-08-05", 1694.96], ["2025-08-06", 2097.15], ["2025-08-07", 1794.26], ["2025-08-08", 1934.75], ["2025-08-09", 1767.33], ["2025-08-10", 1542.31], ["2025-08-11", 2263.1], ["2025-08-12", 2423.66], ["2025-08-13", 1311.52], ["2025-08-14", 1599.98], ["2025-08-15", 1416.79], ["2025-08-16", 1753.4], ["2025-08-17", 2479.61], ["2025-08-18", 1239.62], ["2025-08-19", 2491.73], ["2025-08-20", 2039.57], ["2025-08-21", 2575.44], ["2025-08-22", 2187.46], ["2025-08-23", 2953.38], ["2025-08-24", 1591.76], ["2025-08-25", 2153.58], ["2025-08-26", 1800.81], ["2025-08-27", 2831.25], ["2025-08-28", 2015.23], ["2025-08-29", 2120.92], ["2025-08-30", 2213.37], ["2025-08-31", 2800.19], ["2025-09-01", 1557.46], ["2025-09-02", 2867.43], ["2025-09-03", 1816.89], ["2025-09-04", 2238.71], ["2025-09-05", 2350.48], ["2025-09-06", 2335.69], ["2025-09-07", 2859.96], ["2025-09-08", 2262.1], ["2025-09-09", 1013.36], ["2025-09-10", 2055.9], ["2025-09-11", 3035.73], ["2025-09-12", 1568.3], ["2025-09-13", 2950.01], ["2025-09-14", 2153.61], ["2025-09-15", 901.36], ["2025-09-16", 2276.38], ["2025-09-17", 2544.03], ["2025-09-18", 2329.33], ["2025-09-19", 2557.16], ["2025-09-20", 1186.4], ["2025-09-21", 2590.87], ["2025-09-22", 1711.99], ["2025-09-23", 2502.78], ["2025-09-24", 1788.63], ["2025-09-25", 2347.51], ["2025-09-26", 1939.37], ["2025-09-27", 3190.5], ["2025-09-28", 2049.26], ["2025-09-29", 1660.99], ["2025-09-30", 1945.93], ["2025-10-01", 1630.99], ["2025-10-02", 2236.49], ["2025-10-03", 2599.65], ["2025-10-04", 3018.66], ["2025-10-05", 1078.35], ["2025-10-06", 1968.51], ["2025-10-07", 1806.97], ["2025-10-08", 2337.79], ["2025-10-09", 2609.02], ["2025-10-10", 2456.76], ["2025-10-11", 1546.6], ["2025-10-12", 2309.84], ["2025-10-13", 2550.7], ["2025-10-14", 1915.97], ["2025-10-15", 1697.34], ["2025-10-16", 2102.81], ["2025-10-17", 3165.18], ["2025-10-18", 2200.73], ["2025-10-19", 2277.99], ["2025-10-20", 3491.85], ["2025-10-21", 2886.97], ["2025-10-22", 2422.2], ["2025-10-23", 2706.92], ["2025-10-24", 1870.63], ["2025-10-25", 2275.37], ["2025-10-26", 2116.35], ["2025-10-27", 2027.38], ["2025-10-28", 2400.03], ["2025-10-29", 1531.27], ["2025-10-30", 1949.23], ["2025-10-31", 2520.88], ["2025-11-01", 1379.04], ["2025-11-02", 1970.52], ["2025-11-03", 2041.17], ["2025-11-04", 1786.74], ["2025-11-05", 2979.0], ["2025-11-06", 2775.12], ["2025-11-07", 2550.58], ["2025-11-08", 2471.43], ["2025-11-09", 2607.29], ["2025-11-10", 2217.63], ["2025-11-11", 2534.9], ["2025-11-12", 1360.93], ["2025-11-13", 2169.18], ["2025-11-14", 1790.61], ["2025-11-15", 2715.16], ["2025-11-16", 2507.15], ["2025-11-17", 2587.03], ["2025-11-18", 2224.97], ["2025-11-19", 2636.03], ["2025-11-20", 2333.03], ["2025-11-21", 1950.41], ["2025-11-22", 1598.77], ["2025-11-23", 2723.48], ["2025-11-24", 1664.32], ["2025-11-25", 2095.58], ["2025-11-26", 2605.45], ["2025-11-27", 2577.54], ["2025-11-28", 3268.26], ["2025-11-29", 1876.38], ["2025-11-30", 2125.85], ["2025-12-01", 1772.62], ["2025-12-02", 1974.33], ["2025-12-03", 1640.49], ["2025-12-04", 2238.15], ["2025-12-05", 3121.92], ["2025-12-06", 1912.43], ["2025-12-07", 2162.93], ["2025-12-08", 1903.82], ["2025-12-09", 2274.46], ["2025-12-10", 2434.92], ["2025-12-11", 1883.01], ["2025-12-12", 2053.26], ["2025-12-13", 2123.15], ["2025-12-14", 1346.99], ["2025-12-15", 1598.57], ["2025-12-16", 2056.33], ["2025-12-17", 1810.93], ["2025-12-18", 2456.86], ["2025-12-19", 2340.1], ["2025-12-20", 2090.7], ["2025-12-21", 2392.94], ["2025-12-22", 1462.03], ["2025-12-23", 1141.9], ["2025-12-24", 2876.49], ["2025-12-25", 1733.08], ["2025-12-26", 1670.94], ["2025-12-27", 2580.36], ["2025-12-28", 2164.46], ["2025-12-29", 2250.05], ["2025-12-30", 1585.53], ["2025-12-31", 1502.77], ["2026-01-01", 1759.64], ["2026-01-02", 1247.01], ["2026-01-03", 1593.57], ["2026-01-04", 1170.05], ["2026-01-05", 2097.16], ["2026-01-06", 1969.56], ["2026-01-07", 1816.32], ["2026-01-08", 2391.29], ["2026-01-09", 3057.65], ["2026-01-10", 1337.26], ["2026-01-11", 1611.02], ["2026-01-12", 1847.0], ["2026-01-13", 2658.14], ["2026-01-14", 2391.16], ["2026-01-15", 975.04], ["2026-01-16", 1864.03], ["2026-01-17", 1683.23], ["2026-01-18", 1659.51], ["2026-01-19", 1583.02], ["2026-01-20", 1809.93], ["2026-01-21", 1564.89], ["2026-01-22", 1800.33], ["2026-01-23", 1391.69], ["2026-01-24", 1575.11], ["2026-01-25", 1830.21], ["2026-01-26", 1908.32], ["2026-01-27", 2544.29], ["2026-01-28", 2197.97], ["2026-01-29", 2216.27], ["2026-01-30", 1610.77], ["2026-01-31", 1134.63], ["2026-02-01", 1813.34], ["2026-02-02", 1042.86], ["2026-02-03", 1910.98], ["2026-02-04", 2403.91], ["2026-02-05", 1830.11], ["2026-02-06", 989.88], ["2026-02-07", 884.49], ["2026-02-08", 1921.15], ["2026-02-09", 1894.32], ["2026-02-10", 1440.31], ["2026-02-11", 1393.66], ["2026-02-12", 1071.23], ["2026-02-13", 1973.23], ["2026-02-14", 1638.19], ["2026-02-15", 1177.94], ["2026-02-16", 1855.4], ["2026-02-17", 569.6], ["2026-02-18", 1892.52], ["2026-02-19", 1608.18], ["2026-02-20", 2021.22], ["2026-02-21", 1703.69], ["2026-02-22", 1887.08], ["2026-02-23", 1417.67], ["2026-02-24", 1719.13], ["2026-02-25", 1641.68], ["2026-02-26", 1557.25], ["2026-02-27", 1052.8], ["2026-02-28", 1324.73], ["2026-03-01", 1328.71], ["2026-03-02", 1662.71], ["2026-03-03", 936.84], ["2026-03-04", 1008.3], ["2026-03-05", 1459.41], ["2026-03-06", 1130.37], ["2026-03-07", 939.39], ["2026-03-08", 1442.9], ["2026-03-09", 1719.25], ["2026-03-10", 2528.95], ["2026-03-11", 873.69], ["2026-03-12", 1792.04], ["2026-03-13", 1292.6], ["2026-03-14", 1102.11], ["2026-03-15", 888.43], ["2026-03-16", 810.26], ["2026-03-17", 1212.99], ["2026-03-18", 1045.25], ["2026-03-19", 1141.69], ["2026-03-20", 1343.01], ["2026-03-21", 700.14], ["2026-03-22", 943.63], ["2026-03-23", 957.88], ["2026-03-24", 1046.2], ["2026-03-25", 676.33], ["2026-03-26", 650.8], ["2026-03-27", 480.4], ["2026-03-28", 1585.51], ["2026-03-29", 1649.06], ["2026-03-30", 635.95], ["2026-03-31", 1032.17], ["2026-04-01", 737.79], ["2026-04-02", 1256.06], ["2026-04-03", 568.21], ["2026-04-04", 693.82], ["2026-04-05", 761.35], ["2026-04-06", 729.99], ["2026-04-07", 685.4], ["2026-04-08", 682.64], ["2026-04-09", 828.9], ["2026-04-10", 683.08], ["2026-04-11", 1384.0], ["2026-04-12", 586.44], ["2026-04-13", 1406.43], ["2026-04-14", 397.1], ["2026-04-15", 868.15], ["2026-04-16", 854.2], ["2026-04-17", 835.91], ["2026-04-18", 1131.17], ["2026-04-19", 991.69], ["2026-04-20", 1293.14], ["2026-04-21", 585.75], ["2026-04-22", 879.95], ["2026-04-23", 715.69], ["2026-04-24", 579.18], ["2026-04-25", 617.44], ["2026-04-26", 792.69], ["2026-04-27", 906.99], ["2026-04-28", 898.52], ["2026-04-29", 555.69], ["2026-04-30", 954.62], ["2026-05-01", 498.67], ["2026-05-02", 894.66], ["2026-05-03", 359.28], ["2026-05-04", 762.03], ["2026-05-05", 362.79], ["2026-05-06", 936.7], ["2026-05-07", 984.99], ["2026-05-08", 550.39], ["2026-05-09", 659.6], ["2026-05-10", 660.78], ["2026-05-11", 502.29], ["2026-05-12", 633.83], ["2026-05-13", 406.75], ["2026-05-14", 391.4], ["2026-05-15", 838.34], ["2026-05-16", 506.25], ["2026-05-17", 681.98], ["2026-05-18", 697.04], ["2026-05-19", 367.98], ["2026-05-20", 304.45], ["2026-05-21", 816.15], ["2026-05-22", 457.35], ["2026-05-23", 325.0], ["2026-05-24", 272.3], ["2026-05-25", 558.6], ["2026-05-26", 267.85], ["2026-05-27", 774.24], ["2026-05-28", 482.65], ["2026-05-29", 435.95], ["2026-05-30", 525.19], ["2026-05-31", 448.64], ["2026-06-01", 200.96], ["2026-06-02", 327.47], ["2026-06-03", 168.25], ["2026-06-04", 474.22], ["2026-06-05", 324.48], ["2026-06-06", 306.1], ["2026-06-07", 311.47], ["2026-06-08", 166.79], ["2026-06-09", 395.59], ["2026-06-10", 662.9], ["2026-06-11", 508.49], ["2026-06-12", 301.94], ["2026-06-13", 132.75], ["2026-06-14", 221.85], ["2026-06-15", 620.05], ["2026-06-16", 413.8], ["2026-06-17", 685.75], ["2026-06-18", 169.5], ["2026-06-19", 136.43], ["2026-06-20", 116.88], ["2026-06-21", 1193.64], ["2026-06-22", 626.05], ["2026-06-23", 272.8], ["2026-06-24", 164.19], ["2026-06-25", 64.0], ["2026-06-26", 374.2], ["2026-06-27", 161.73], ["2026-06-28", 175.65], ["2026-06-29", 262.83], ["2026-06-30", 355.55], ["2026-07-01", 73.99], ["2026-07-02", 208.98], ["2026-07-03", 371.5], ["2026-07-04", 156.0], ["2026-07-05", 259.35], ["2026-07-06", 334.9], ["2026-07-07", 307.05], ["2026-07-08", 162.3], ["2026-07-09", 237.14], ["2026-07-10", 56.0], ["2026-07-11", 145.74], ["2026-07-12", 232.49], ["2026-07-13", 150.0], ["2026-07-14", 226.5], ["2026-07-15", 586.36], ["2026-07-16", 209.1], ["2026-07-17", 39.0], ["2026-07-18", 18.75], ["2026-07-19", 93.49], ["2026-07-20", 91.3], ["2026-07-21", 245.0], ["2026-07-22", 294.02], ["2026-07-23", 54.25], ["2026-07-24", 51.0], ["2026-07-25", 28.79], ["2026-07-26", 165.88], ["2026-07-28", 343.05], ["2026-07-29", 24.0], ["2026-07-31", 51.99], ["2026-08-01", 43.99], ["2026-08-02", 327.03], ["2026-08-03", 126.1], ["2026-08-04", 98.79], ["2026-08-05", 177.0], ["2026-08-08", 224.0], ["2026-08-09", 77.9], ["2026-08-10", 47.97], ["2026-08-11", 168.8], ["2026-08-13", 95.98], ["2026-08-18", 98.95], ["2026-08-19", 41.4], ["2026-08-20", 16.5], ["2026-08-21", 29.5], ["2026-08-22", 144.0], ["2026-08-23", 40.5], ["2026-08-25", 97.15], ["2026-08-26", 129.0], ["2026-08-28", 326.36], ["2026-08-29", 382.5], ["2026-09-08", 93.49], ["2026-09-10", 176.4], ["2026-09-16", 101.4]]};
+    const renderedCharts = {};
+
+    function formatDollars(value) {
+      return "$" + value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function renderChart(storeName) {
+      if (renderedCharts[storeName]) {
+        return;
+      }
+      const options = {
+        chart: {
+          type: "area",
+          height: 360,
+          fontFamily: "inherit",
+          zoom: { enabled: true },
+          toolbar: { show: true }
+        },
+        series: [{ name: "Revenue", data: revenueByStore[storeName] }],
+        colors: ["#206bc4"],
+        dataLabels: { enabled: false },
+        stroke: { width: 1.5, curve: "straight" },
+        fill: { type: "gradient", gradient: { opacityFrom: 0.35, opacityTo: 0.05 } },
+        xaxis: { type: "datetime" },
+        yaxis: { labels: { formatter: formatDollars } },
+        tooltip: { x: { format: "yyyy-MM-dd" }, y: { formatter: formatDollars } },
+        grid: { strokeDashArray: 4 }
+      };
+      const chart = new ApexCharts(document.getElementById("chart-" + storeName), options);
+      chart.render();
+      renderedCharts[storeName] = chart;
+    }
+
+    document.querySelectorAll('[data-bs-toggle="tab"]').forEach(function (tabButton) {
+      tabButton.addEventListener("shown.bs.tab", function (event) {
+        renderChart(event.target.dataset.store);
+      });
+    });
+
+    renderChart(Object.keys(revenueByStore)[0]);
+  </script>
+</body>
+</html>

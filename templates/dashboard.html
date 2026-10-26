@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bookstore Sales Dashboard</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0/dist/css/tabler.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+  <style>
+    .kpi-icon { font-size: 1.5rem; }
+    .buyer-ids { font-size: 1.1rem; word-break: break-word; }
+    .chart-box { min-height: 360px; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="navbar navbar-expand-md d-print-none">
+      <div class="container-xl">
+        <span class="navbar-brand">
+          <i class="ti ti-chart-bar me-2 text-primary"></i>
+          Bookstore Sales Dashboard
+        </span>
+        <div class="navbar-nav flex-row order-md-last">
+          <span class="text-secondary small">Data refreshed: {{ generated_at }}</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="page-wrapper">
+      <div class="page-header d-print-none">
+        <div class="container-xl">
+          <div class="row g-2 align-items-center">
+            <div class="col">
+              <div class="page-pretitle">Overview</div>
+              <h2 class="page-title">Sales performance by store</h2>
+            </div>
+          </div>
+          <ul class="nav nav-tabs mt-3" role="tablist">
+            {% for store in stores %}
+            <li class="nav-item" role="presentation">
+              <button class="nav-link {% if loop.first %}active{% endif %}"
+                      data-bs-toggle="tab"
+                      data-bs-target="#tab-{{ store.store }}"
+                      data-store="{{ store.store }}"
+                      type="button" role="tab">
+                <i class="ti ti-building-store me-2"></i>{{ store.store }}
+              </button>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+
+      <div class="page-body">
+        <div class="container-xl">
+          <div class="tab-content">
+            {% for store in stores %}
+            <div class="tab-pane fade {% if loop.first %}show active{% endif %}" id="tab-{{ store.store }}" role="tabpanel">
+
+              <div class="row row-deck row-cards mb-3">
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body d-flex align-items-center">
+                      <span class="bg-primary text-white avatar me-3"><i class="ti ti-currency-dollar kpi-icon"></i></span>
+                      <div>
+                        <div class="text-secondary">Total revenue</div>
+                        <div class="h2 mb-0">${{ "{:,.2f}".format(store.total_revenue) }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body d-flex align-items-center">
+                      <span class="bg-azure text-white avatar me-3"><i class="ti ti-shopping-cart kpi-icon"></i></span>
+                      <div>
+                        <div class="text-secondary">Orders</div>
+                        <div class="h2 mb-0">{{ "{:,}".format(store.orders_count) }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body d-flex align-items-center">
+                      <span class="bg-green text-white avatar me-3"><i class="ti ti-users kpi-icon"></i></span>
+                      <div>
+                        <div class="text-secondary">Unique users</div>
+                        <div class="h2 mb-0">{{ "{:,}".format(store.unique_users) }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card card-sm">
+                    <div class="card-body d-flex align-items-center">
+                      <span class="bg-orange text-white avatar me-3"><i class="ti ti-books kpi-icon"></i></span>
+                      <div>
+                        <div class="text-secondary">Unique sets of authors</div>
+                        <div class="h2 mb-0">{{ "{:,}".format(store.unique_author_sets) }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row row-deck row-cards mb-3">
+                <div class="col-lg-8">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title"><i class="ti ti-chart-line me-2"></i>Daily revenue (USD)</h3>
+                    </div>
+                    <div class="card-body">
+                      <div id="chart-{{ store.store }}" class="chart-box"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title"><i class="ti ti-trophy me-2"></i>Top 5 days by revenue</h3>
+                    </div>
+                    <div class="table-responsive">
+                      <table class="table card-table table-vcenter">
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Date</th>
+                            <th class="text-end">Revenue</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for day in store.top_days %}
+                          <tr>
+                            <td><span class="badge {% if loop.first %}bg-yellow text-yellow-fg{% else %}bg-secondary-lt{% endif %}">{{ loop.index }}</span></td>
+                            <td class="font-monospace">{{ day.day }}</td>
+                            <td class="text-end fw-bold">${{ "{:,.2f}".format(day.revenue) }}</td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row row-deck row-cards">
+                <div class="col-lg-6">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title"><i class="ti ti-feather me-2"></i>Most popular author(s)</h3>
+                    </div>
+                    <div class="card-body">
+                      {% for author in store.most_popular_authors %}
+                      <div class="mb-2">
+                        {% for name in author.author_set.split(", ") %}
+                        <span class="badge bg-blue-lt fs-4 me-1 mb-1"><i class="ti ti-user me-1"></i>{{ name }}</span>
+                        {% endfor %}
+                      </div>
+                      <div class="text-secondary">
+                        {{ "{:,}".format(author.books_sold) }} books sold
+                        {% if author.author_set.split(", ") | length > 1 %}(written together){% endif %}
+                      </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title"><i class="ti ti-crown me-2"></i>Best buyer (with aliases)</h3>
+                    </div>
+                    <div class="card-body">
+                      <div class="text-secondary mb-1">User IDs</div>
+                      <code class="buyer-ids">{{ store.best_customer.user_ids | tojson }}</code>
+                      <div class="row mt-3">
+                        <div class="col">
+                          <div class="text-secondary">Total spent</div>
+                          <div class="h3 mb-0">${{ "{:,.2f}".format(store.best_customer.total_spent) }}</div>
+                        </div>
+                        <div class="col">
+                          <div class="text-secondary">Linked accounts</div>
+                          <div class="h3 mb-0">{{ store.best_customer.user_ids | length }}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <footer class="footer footer-transparent d-print-none">
+        <div class="container-xl text-secondary small">
+          Prices converted to USD (1 EUR = 1.2 USD). Built with Python, pandas, DuckDB, Tabler and ApexCharts.
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0/dist/js/tabler.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.54.0/dist/apexcharts.min.js"></script>
+  <script>
+    const revenueByStore = {{ chart_data | tojson }};
+    const renderedCharts = {};
+
+    function formatDollars(value) {
+      return "$" + value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function renderChart(storeName) {
+      if (renderedCharts[storeName]) {
+        return;
+      }
+      const options = {
+        chart: {
+          type: "area",
+          height: 360,
+          fontFamily: "inherit",
+          zoom: { enabled: true },
+          toolbar: { show: true }
+        },
+        series: [{ name: "Revenue", data: revenueByStore[storeName] }],
+        colors: ["#206bc4"],
+        dataLabels: { enabled: false },
+        stroke: { width: 1.5, curve: "straight" },
+        fill: { type: "gradient", gradient: { opacityFrom: 0.35, opacityTo: 0.05 } },
+        xaxis: { type: "datetime" },
+        yaxis: { labels: { formatter: formatDollars } },
+        tooltip: { x: { format: "yyyy-MM-dd" }, y: { formatter: formatDollars } },
+        grid: { strokeDashArray: 4 }
+      };
+      const chart = new ApexCharts(document.getElementById("chart-" + storeName), options);
+      chart.render();
+      renderedCharts[storeName] = chart;
+    }
+
+    document.querySelectorAll('[data-bs-toggle="tab"]').forEach(function (tabButton) {
+      tabButton.addEventListener("shown.bs.tab", function (event) {
+        renderChart(event.target.dataset.store);
+      });
+    });
+
+    renderChart(Object.keys(revenueByStore)[0]);
+  </script>
+</body>
+</html>
