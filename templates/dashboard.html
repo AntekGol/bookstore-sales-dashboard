@@ -6,10 +6,50 @@
   <title>Bookstore Sales Dashboard</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0/dist/css/tabler.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/tabulator-tables@6.3.1/dist/css/tabulator_bootstrap5.min.css">
   <style>
     .kpi-icon { font-size: 1.5rem; }
     .buyer-ids { font-size: 1.1rem; word-break: break-word; }
     .chart-box { min-height: 360px; }
+    .chat-messages {
+      height: 460px;
+      overflow-y: auto;
+      padding: 1rem;
+      background: #f8fafc;
+      border-radius: 6px;
+      border: 1px solid #e6e7e9;
+    }
+    .chat-bubble {
+      max-width: 90%;
+      padding: 0.65rem 0.9rem;
+      border-radius: 10px;
+      margin-bottom: 0.75rem;
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+    .chat-bubble p:last-child { margin-bottom: 0; }
+    .chat-bubble-user {
+      margin-left: auto;
+      background: #206bc4;
+      color: #ffffff;
+    }
+    .chat-bubble-assistant {
+      margin-right: auto;
+      background: #ffffff;
+      border: 1px solid #e6e7e9;
+      color: #1d273b;
+    }
+    .tool-badge {
+      font-size: 0.72rem;
+      margin-right: 0.25rem;
+    }
+    .prompt-chip {
+      cursor: pointer;
+      user-select: none;
+    }
+    #explorer-table {
+      min-height: 440px;
+    }
   </style>
 </head>
 <body>
@@ -20,7 +60,10 @@
           <i class="ti ti-chart-bar me-2 text-primary"></i>
           Bookstore Sales Dashboard
         </span>
-        <div class="navbar-nav flex-row order-md-last">
+        <div class="navbar-nav flex-row order-md-last align-items-center gap-2">
+          <button id="btn-reset-ui" class="btn btn-sm btn-outline-secondary" type="button">
+            <i class="ti ti-refresh me-1"></i>Reset filters & zoom
+          </button>
           <span class="text-secondary small">Data refreshed: {{ generated_at }}</span>
         </div>
       </div>
@@ -31,14 +74,25 @@
         <div class="container-xl">
           <div class="row g-2 align-items-center">
             <div class="col">
-              <div class="page-pretitle">Overview</div>
+              <div class="page-pretitle">Overview & AI Control</div>
               <h2 class="page-title">Sales performance by store</h2>
+            </div>
+            <div class="col-auto">
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-primary" id="view-btn-overview" data-view="overview">
+                  <i class="ti ti-layout-dashboard me-1"></i>Overview
+                </button>
+                <button type="button" class="btn btn-outline-primary" id="view-btn-explorer" data-view="explorer">
+                  <i class="ti ti-table me-1"></i>Data Explorer
+                </button>
+              </div>
             </div>
           </div>
           <ul class="nav nav-tabs mt-3" role="tablist">
             {% for store in stores %}
             <li class="nav-item" role="presentation">
               <button class="nav-link {% if loop.first %}active{% endif %}"
+                      id="store-tab-{{ store.store }}"
                       data-bs-toggle="tab"
                       data-bs-target="#tab-{{ store.store }}"
                       data-store="{{ store.store }}"
@@ -53,150 +107,216 @@
 
       <div class="page-body">
         <div class="container-xl">
-          <div class="tab-content">
-            {% for store in stores %}
-            <div class="tab-pane fade {% if loop.first %}show active{% endif %}" id="tab-{{ store.store }}" role="tabpanel">
+          <div class="row g-3">
+            <div class="col-lg-8">
+              <div id="section-overview">
+                <div class="tab-content">
+                  {% for store in stores %}
+                  <div class="tab-pane fade {% if loop.first %}show active{% endif %}" id="tab-{{ store.store }}" role="tabpanel">
 
-              <div class="row row-deck row-cards mb-3">
-                <div class="col-sm-6 col-lg-3">
-                  <div class="card card-sm">
-                    <div class="card-body d-flex align-items-center">
-                      <span class="bg-primary text-white avatar me-3"><i class="ti ti-currency-dollar kpi-icon"></i></span>
-                      <div>
-                        <div class="text-secondary">Total revenue</div>
-                        <div class="h2 mb-0">${{ "{:,.2f}".format(store.total_revenue) }}</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-sm-6 col-lg-3">
-                  <div class="card card-sm">
-                    <div class="card-body d-flex align-items-center">
-                      <span class="bg-azure text-white avatar me-3"><i class="ti ti-shopping-cart kpi-icon"></i></span>
-                      <div>
-                        <div class="text-secondary">Orders</div>
-                        <div class="h2 mb-0">{{ "{:,}".format(store.orders_count) }}</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-sm-6 col-lg-3">
-                  <div class="card card-sm">
-                    <div class="card-body d-flex align-items-center">
-                      <span class="bg-green text-white avatar me-3"><i class="ti ti-users kpi-icon"></i></span>
-                      <div>
-                        <div class="text-secondary">Unique users</div>
-                        <div class="h2 mb-0">{{ "{:,}".format(store.unique_users) }}</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-sm-6 col-lg-3">
-                  <div class="card card-sm">
-                    <div class="card-body d-flex align-items-center">
-                      <span class="bg-orange text-white avatar me-3"><i class="ti ti-books kpi-icon"></i></span>
-                      <div>
-                        <div class="text-secondary">Unique sets of authors</div>
-                        <div class="h2 mb-0">{{ "{:,}".format(store.unique_author_sets) }}</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row row-deck row-cards mb-3">
-                <div class="col-lg-8">
-                  <div class="card">
-                    <div class="card-header">
-                      <h3 class="card-title"><i class="ti ti-chart-line me-2"></i>Daily revenue (USD)</h3>
-                    </div>
-                    <div class="card-body">
-                      <div id="chart-{{ store.store }}" class="chart-box"></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-4">
-                  <div class="card">
-                    <div class="card-header">
-                      <h3 class="card-title"><i class="ti ti-trophy me-2"></i>Top 5 days by revenue</h3>
-                    </div>
-                    <div class="table-responsive">
-                      <table class="table card-table table-vcenter">
-                        <thead>
-                          <tr>
-                            <th>#</th>
-                            <th>Date</th>
-                            <th class="text-end">Revenue</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {% for day in store.top_days %}
-                          <tr>
-                            <td><span class="badge {% if loop.first %}bg-yellow text-yellow-fg{% else %}bg-secondary-lt{% endif %}">{{ loop.index }}</span></td>
-                            <td class="font-monospace">{{ day.day }}</td>
-                            <td class="text-end fw-bold">${{ "{:,.2f}".format(day.revenue) }}</td>
-                          </tr>
-                          {% endfor %}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row row-deck row-cards">
-                <div class="col-lg-6">
-                  <div class="card">
-                    <div class="card-header">
-                      <h3 class="card-title"><i class="ti ti-feather me-2"></i>Most popular author(s)</h3>
-                    </div>
-                    <div class="card-body">
-                      {% for author in store.most_popular_authors %}
-                      <div class="mb-2">
-                        {% for name in author.author_set.split(", ") %}
-                        <span class="badge bg-blue-lt fs-4 me-1 mb-1"><i class="ti ti-user me-1"></i>{{ name }}</span>
-                        {% endfor %}
-                      </div>
-                      <div class="text-secondary">
-                        {{ "{:,}".format(author.books_sold) }} books sold
-                        {% if author.author_set.split(", ") | length > 1 %}(written together){% endif %}
-                      </div>
-                      {% endfor %}
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="card">
-                    <div class="card-header">
-                      <h3 class="card-title"><i class="ti ti-crown me-2"></i>Best buyer (with aliases)</h3>
-                    </div>
-                    <div class="card-body">
-                      <div class="text-secondary mb-1">User IDs</div>
-                      <code class="buyer-ids">{{ store.best_customer.user_ids | tojson }}</code>
-                      <div class="row mt-3">
-                        <div class="col">
-                          <div class="text-secondary">Total spent</div>
-                          <div class="h3 mb-0">${{ "{:,.2f}".format(store.best_customer.total_spent) }}</div>
+                    <div class="row row-deck row-cards mb-3">
+                      <div class="col-sm-6 col-lg-3">
+                        <div class="card card-sm">
+                          <div class="card-body d-flex align-items-center">
+                            <span class="bg-primary text-white avatar me-3"><i class="ti ti-currency-dollar kpi-icon"></i></span>
+                            <div>
+                              <div class="text-secondary">Total revenue</div>
+                              <div class="h3 mb-0">${{ "{:,.2f}".format(store.total_revenue) }}</div>
+                            </div>
+                          </div>
                         </div>
-                        <div class="col">
-                          <div class="text-secondary">Linked accounts</div>
-                          <div class="h3 mb-0">{{ store.best_customer.user_ids | length }}</div>
+                      </div>
+                      <div class="col-sm-6 col-lg-3">
+                        <div class="card card-sm">
+                          <div class="card-body d-flex align-items-center">
+                            <span class="bg-azure text-white avatar me-3"><i class="ti ti-shopping-cart kpi-icon"></i></span>
+                            <div>
+                              <div class="text-secondary">Orders</div>
+                              <div class="h3 mb-0">{{ "{:,}".format(store.orders_count) }}</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-6 col-lg-3">
+                        <div class="card card-sm">
+                          <div class="card-body d-flex align-items-center">
+                            <span class="bg-green text-white avatar me-3"><i class="ti ti-users kpi-icon"></i></span>
+                            <div>
+                              <div class="text-secondary">Unique users</div>
+                              <div class="h3 mb-0">{{ "{:,}".format(store.unique_users) }}</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-6 col-lg-3">
+                        <div class="card card-sm">
+                          <div class="card-body d-flex align-items-center">
+                            <span class="bg-orange text-white avatar me-3"><i class="ti ti-books kpi-icon"></i></span>
+                            <div>
+                              <div class="text-secondary">Unique sets of authors</div>
+                              <div class="h3 mb-0">{{ "{:,}".format(store.unique_author_sets) }}</div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
+
+                    <div class="row row-deck row-cards mb-3">
+                      <div class="col-lg-7">
+                        <div class="card">
+                          <div class="card-header">
+                            <h3 class="card-title"><i class="ti ti-chart-line me-2"></i>Daily revenue (USD)</h3>
+                          </div>
+                          <div class="card-body">
+                            <div id="chart-{{ store.store }}" class="chart-box"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-5">
+                        <div class="card">
+                          <div class="card-header">
+                            <h3 class="card-title"><i class="ti ti-trophy me-2"></i>Top 5 days by revenue</h3>
+                          </div>
+                          <div class="table-responsive">
+                            <table class="table card-table table-vcenter">
+                              <thead>
+                                <tr>
+                                  <th>#</th>
+                                  <th>Date</th>
+                                  <th class="text-end">Revenue</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% for day in store.top_days %}
+                                <tr>
+                                  <td><span class="badge {% if loop.first %}bg-yellow text-yellow-fg{% else %}bg-secondary-lt{% endif %}">{{ loop.index }}</span></td>
+                                  <td class="font-monospace">{{ day.day }}</td>
+                                  <td class="text-end fw-bold">${{ "{:,.2f}".format(day.revenue) }}</td>
+                                </tr>
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row row-deck row-cards">
+                      <div class="col-lg-6">
+                        <div class="card">
+                          <div class="card-header">
+                            <h3 class="card-title"><i class="ti ti-feather me-2"></i>Most popular author(s)</h3>
+                          </div>
+                          <div class="card-body">
+                            {% for author in store.most_popular_authors %}
+                            <div class="mb-2">
+                              {% for name in author.author_set.split(", ") %}
+                              <span class="badge bg-blue-lt fs-4 me-1 mb-1"><i class="ti ti-user me-1"></i>{{ name }}</span>
+                              {% endfor %}
+                            </div>
+                            <div class="text-secondary">
+                              {{ "{:,}".format(author.books_sold) }} books sold
+                              {% if author.author_set.split(", ") | length > 1 %}(written together){% endif %}
+                            </div>
+                            {% endfor %}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="card">
+                          <div class="card-header">
+                            <h3 class="card-title"><i class="ti ti-crown me-2"></i>Best buyer (with aliases)</h3>
+                          </div>
+                          <div class="card-body">
+                            <div class="text-secondary mb-1">User IDs</div>
+                            <code class="buyer-ids">{{ store.best_customer.user_ids | tojson }}</code>
+                            <div class="row mt-3">
+                              <div class="col">
+                                <div class="text-secondary">Total spent</div>
+                                <div class="h3 mb-0">${{ "{:,.2f}".format(store.best_customer.total_spent) }}</div>
+                              </div>
+                              <div class="col">
+                                <div class="text-secondary">Linked accounts</div>
+                                <div class="h3 mb-0">{{ store.best_customer.user_ids | length }}</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                   </div>
+                  {% endfor %}
                 </div>
               </div>
 
+              <div id="section-explorer" class="d-none">
+                <div class="card">
+                  <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
+                    <div>
+                      <h3 class="card-title mb-0">
+                        <i class="ti ti-database me-2"></i>
+                        <span id="explorer-title">Data Explorer</span>
+                      </h3>
+                      <div class="text-secondary small" id="explorer-subtitle">Showing full table</div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                      <div class="btn-group btn-group-sm" role="group">
+                        <button type="button" class="btn btn-primary explorer-table-btn" data-table="books">Books</button>
+                        <button type="button" class="btn btn-outline-primary explorer-table-btn" data-table="users">Users</button>
+                        <button type="button" class="btn btn-outline-primary explorer-table-btn" data-table="orders">Orders</button>
+                      </div>
+                      <input type="text" id="explorer-search" class="form-control form-control-sm" placeholder="Quick search..." style="width: 170px;">
+                    </div>
+                  </div>
+                  <div class="card-body p-0">
+                    <div id="explorer-table"></div>
+                  </div>
+                </div>
+              </div>
             </div>
-            {% endfor %}
+
+            <div class="col-lg-4">
+              <div class="card">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                  <h3 class="card-title mb-0">
+                    <i class="ti ti-message-chatbot me-2 text-primary"></i>AI Data Assistant
+                  </h3>
+                  <span class="badge bg-green-lt" id="active-store-badge">STORE1</span>
+                </div>
+                <div class="card-body">
+                  <div class="mb-2">
+                    <div class="text-secondary small mb-1">Try asking or commanding:</div>
+                    <div class="d-flex flex-wrap gap-1">
+                      <span class="badge bg-azure-lt prompt-chip" data-prompt="Select users with e-mails started with s or p">Emails starting with s or p</span>
+                      <span class="badge bg-azure-lt prompt-chip" data-prompt="Filter out books that has the people names in the title">Filter out people names in title</span>
+                      <span class="badge bg-azure-lt prompt-chip" data-prompt="Who is the top buyer in this store and what books did they buy?">Top buyer profile</span>
+                      <span class="badge bg-azure-lt prompt-chip" data-prompt="Compare total revenue across all 5 stores">Compare stores revenue</span>
+                    </div>
+                  </div>
+
+                  <div id="chat-messages" class="chat-messages mb-3">
+                    <div class="chat-bubble chat-bubble-assistant">
+                      Ask me anything about orders, users, or books, or tell me to filter tables and zoom charts on the dashboard.
+                    </div>
+                  </div>
+
+                  <form id="chat-form" class="d-flex gap-2">
+                    <input type="text" id="chat-input" class="form-control" placeholder="Ask a question or give a command..." autocomplete="off">
+                    <button type="submit" id="chat-send" class="btn btn-primary">
+                      <i class="ti ti-send"></i>
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       <footer class="footer footer-transparent d-print-none">
         <div class="container-xl text-secondary small">
-          Prices converted to USD (1 EUR = 1.2 USD). Built with Python, pandas, DuckDB, Tabler and ApexCharts.
+          Prices converted to USD (1 EUR = 1.2 USD). Built with Python, pandas, DuckDB, FastAPI, Tabler and ApexCharts.
         </div>
       </footer>
     </div>
@@ -204,12 +324,741 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0/dist/js/tabler.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.54.0/dist/apexcharts.min.js"></script>
+  <script src="https://unpkg.com/tabulator-tables@6.3.1/dist/js/tabulator.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked@15.0.7/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.4/dist/purify.min.js"></script>
   <script>
+    const API_BASE = {{ api_url | tojson }};
     const revenueByStore = {{ chart_data | tojson }};
+    const storeSummaries = {{ store_summaries | tojson }};
     const renderedCharts = {};
+    const storeCache = {};
+
+    const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const KNOWN_NAMES = new Set([
+      "absalom", "amadeus", "brian", "caesar", "chapman", "cooper", "cyril",
+      "django", "donnie", "darko", "edna", "eminem", "eve", "forrest", "gump",
+      "francoise", "françoise", "sagan", "gandhi", "garry", "grunty", "icarus",
+      "indiana", "jones", "jacob", "jane", "joshua", "kane", "kirby", "lawrence",
+      "lebowski", "luigi", "mario", "marley", "marshall", "mathers", "mary",
+      "max", "payne", "mononoke", "nemo", "pep", "pepper", "phlebas", "pilate",
+      "rocky", "rosemary", "sutcliff", "ryan", "smith", "tracy", "truman",
+      "waring", "wario", "whitney", "houston", "will", "yoshi", "yuri", "yuris",
+      "zelda", "bourne", "luke", "o'brien"
+    ]);
+
+    const GEMINI_REV = "A2giDljQ7f_Zubg46QFDqWdgch3ICi66c2HswWvTAwFzJ6NR8bA.QA";
+    const GEMINI_MODELS = ["gemini-3.5-flash-lite", "gemini-flash-latest", "gemini-3.5-flash", "gemini-3.8-flash"];
+
+    let currentStore = Object.keys(revenueByStore)[0];
+    let currentView = "overview";
+    let currentTable = "books";
+    let tabulatorInstance = null;
+    let chatHistory = [];
+
+    function apiUrl(path) {
+      return API_BASE ? API_BASE + path : path;
+    }
 
     function formatDollars(value) {
-      return "$" + value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      return "$" + Number(value).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function hasPersonName(text) {
+      const cleaned = String(text).toLowerCase().replace(/[^a-za-zéèêàùç' ]/g, " ");
+      const words = cleaned.split(/\s+/).map(function (w) { return w.replace(/^'+|'+$/g, ""); }).filter(Boolean);
+      if (words.some(function (w) { return KNOWN_NAMES.has(w); })) {
+        return true;
+      }
+      return /\b(mr|mrs|ms|miss|dr|sgt|st|private)\.?\s+[A-Z]/.test(String(text));
+    }
+
+    function matchSemanticValues(values, description) {
+      const desc = String(description || "").toLowerCase();
+      if (desc.includes("name") || desc.includes("person") || desc.includes("people") || desc.includes("human")) {
+        const matched = new Set(values.filter(hasPersonName));
+        if (desc.includes("not ") || desc.includes("without") || desc.includes("no ")) {
+          return new Set(values.filter(function (v) { return !matched.has(v); }));
+        }
+        return matched;
+      }
+      const stopWords = new Set(["the", "with", "that", "has", "have", "contains", "contain", "title", "titles", "book", "books"]);
+      const keywords = (desc.match(/[a-z]{3,}/g) || []).filter(function (w) { return !stopWords.has(w); });
+      return new Set(values.filter(function (v) {
+        const lower = String(v).toLowerCase();
+        return keywords.some(function (k) { return lower.includes(k); });
+      }));
+    }
+
+    async function loadStoreAsset(storeName) {
+      const normalized = String(storeName || currentStore).toUpperCase().replace(/\s+/g, "");
+      const target = normalized.match(/^[1-5]$/) ? "STORE" + normalized : normalized;
+      if (storeCache[target]) {
+        return storeCache[target];
+      }
+      const response = await fetch("assets/" + target + ".json");
+      if (!response.ok) {
+        throw new Error("Could not load store asset " + target);
+      }
+      const raw = await response.json();
+      const userMap = {};
+      raw.users.forEach(function (u) { userMap[u.id] = u; });
+      const bookMap = {};
+      raw.books.forEach(function (b) { bookMap[b.id] = b; });
+
+      const orders = raw.orders.map(function (arr) {
+        const dateStr = arr[1];
+        const parts = dateStr.split("-").map(Number);
+        const dt = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2]));
+        const u = userMap[arr[2]] || {};
+        const b = bookMap[arr[3]] || {};
+        return {
+          order_id: arr[0],
+          date: dateStr,
+          year: parts[0],
+          month: parts[1],
+          day: parts[2],
+          weekday: WEEKDAYS[dt.getUTCDay()],
+          user_id: arr[2],
+          customer_id: u.customer_id || arr[2],
+          user_name: u.name || "",
+          email: u.email || "",
+          book_id: arr[3],
+          title: b.title || "",
+          authors: b.authors || "",
+          genre: b.genre || "",
+          quantity: arr[4],
+          unit_price: arr[5],
+          paid_price: arr[6]
+        };
+      });
+
+      storeCache[target] = {
+        name: target,
+        books: raw.books,
+        users: raw.users,
+        orders: orders
+      };
+      return storeCache[target];
+    }
+
+    async function resolveStoresData(storeArg) {
+      const clean = String(storeArg || currentStore).trim().toUpperCase().replace(/\s+/g, "");
+      if (clean === "ALL") {
+        const names = Object.keys(revenueByStore);
+        return Promise.all(names.map(loadStoreAsset));
+      }
+      const name = clean.match(/^[1-5]$/) ? "STORE" + clean : clean;
+      return [await loadStoreAsset(name)];
+    }
+
+    function applyFilterSpec(rows, filterSpec) {
+      const col = filterSpec.column;
+      const op = filterSpec.operator;
+      let vals = filterSpec.values !== undefined ? filterSpec.values : filterSpec.value;
+      if (!Array.isArray(vals)) {
+        vals = vals !== undefined && vals !== null ? [vals] : [];
+      }
+      vals = vals.map(function (v) { return String(v).trim(); }).filter(Boolean);
+      if (vals.length === 0) {
+        return rows;
+      }
+
+      if (op === "matches_description" || op === "not_matches_description") {
+        const distinct = Array.from(new Set(rows.map(function (r) { return String(r[col] || ""); })));
+        const matchedSet = matchSemanticValues(distinct, vals[0]);
+        return rows.filter(function (r) {
+          const isMatch = matchedSet.has(String(r[col] || ""));
+          return op === "not_matches_description" ? !isMatch : isMatch;
+        });
+      }
+
+      const lowerVals = vals.map(function (v) { return v.toLowerCase(); });
+
+      return rows.filter(function (row) {
+        const rawVal = row[col];
+        if (rawVal === null || rawVal === undefined) {
+          return false;
+        }
+        const strVal = String(rawVal).toLowerCase();
+        if (op === "contains" || op === "not_contains") {
+          const hit = lowerVals.some(function (v) { return strVal.includes(v); });
+          return op === "not_contains" ? !hit : hit;
+        }
+        if (op === "starts_with" || op === "not_starts_with") {
+          const hit = lowerVals.some(function (v) { return strVal.startsWith(v); });
+          return op === "not_starts_with" ? !hit : hit;
+        }
+        if (op === "ends_with" || op === "not_ends_with") {
+          const hit = lowerVals.some(function (v) { return strVal.endsWith(v); });
+          return op === "not_ends_with" ? !hit : hit;
+        }
+        if (op === "equals" || op === "not_equals") {
+          const hit = lowerVals.some(function (v) {
+            return typeof rawVal === "number" ? rawVal === Number(v) : strVal === v;
+          });
+          return op === "not_equals" ? !hit : hit;
+        }
+        const cmpTarget = typeof rawVal === "number" ? Number(vals[0]) : lowerVals[0];
+        const cmpSource = typeof rawVal === "number" ? rawVal : strVal;
+        if (op === "greater_than") return cmpSource > cmpTarget;
+        if (op === "greater_or_equal") return cmpSource >= cmpTarget;
+        if (op === "less_than") return cmpSource < cmpTarget;
+        if (op === "less_or_equal") return cmpSource <= cmpTarget;
+        return true;
+      });
+    }
+
+    function filterRows(rows, filters, matchMode) {
+      if (!filters || filters.length === 0) {
+        return rows.slice();
+      }
+      if (matchMode === "any") {
+        const matchedObjects = new Set();
+        filters.forEach(function (f) {
+          applyFilterSpec(rows, f).forEach(function (r) { matchedObjects.add(r); });
+        });
+        return rows.filter(function (r) { return matchedObjects.has(r); });
+      }
+      let current = rows.slice();
+      filters.forEach(function (f) {
+        current = applyFilterSpec(current, f);
+      });
+      return current;
+    }
+
+    function computeAggregate(rows, func, column) {
+      if (func === "count") return rows.length;
+      if (func === "count_distinct") {
+        return new Set(rows.map(function (r) { return r[column]; })).size;
+      }
+      const nums = rows.map(function (r) { return Number(r[column]); }).filter(function (n) { return !Number.isNaN(n); });
+      if (nums.length === 0) return null;
+      if (func === "sum") {
+        return Math.round(nums.reduce(function (a, b) { return a + b; }, 0) * 100) / 100;
+      }
+      if (func === "avg") {
+        return Math.round((nums.reduce(function (a, b) { return a + b; }, 0) / nums.length) * 100) / 100;
+      }
+      if (func === "min") return Math.min.apply(null, nums);
+      if (func === "max") return Math.max.apply(null, nums);
+      return rows.length;
+    }
+
+    async function runBrowserTool(name, args) {
+      const storeArg = args.store || currentStore;
+      if (name === "get_store_summary") {
+        const clean = String(storeArg).trim().toUpperCase().replace(/\s+/g, "");
+        const target = clean.match(/^[1-5]$/) ? "STORE" + clean : clean;
+        const selected = target === "ALL"
+          ? storeSummaries
+          : storeSummaries.filter(function (s) { return s.store === target; });
+        return { result: { stores: selected }, action: null };
+      }
+
+      if (name === "query_data") {
+        const storesData = await resolveStoresData(storeArg);
+        const table = args.table || "orders";
+        let rows = [];
+        storesData.forEach(function (sd) {
+          const tableRows = sd[table] || [];
+          if (storesData.length > 1) {
+            tableRows.forEach(function (r) {
+              rows.push(Object.assign({ store: sd.name }, r));
+            });
+          } else {
+            rows = rows.concat(tableRows);
+          }
+        });
+        const filtered = filterRows(rows, args.filters || [], args.match || "all");
+        const limit = Math.min(Math.max(Number(args.limit || 20), 1), 50);
+
+        if (args.aggregate) {
+          if (!args.group_by) {
+            return {
+              result: {
+                matching_rows: filtered.length,
+                value: computeAggregate(filtered, args.aggregate, args.column)
+              },
+              action: null
+            };
+          }
+          const groupsMap = {};
+          filtered.forEach(function (r) {
+            const key = r[args.group_by];
+            if (!groupsMap[key]) groupsMap[key] = [];
+            groupsMap[key].push(r);
+          });
+          const groupsList = Object.keys(groupsMap).map(function (key) {
+            const item = {};
+            item[args.group_by] = key;
+            item.value = computeAggregate(groupsMap[key], args.aggregate, args.column);
+            return item;
+          });
+          const asc = args.sort_order === "asc";
+          groupsList.sort(function (a, b) {
+            return asc ? a.value - b.value : b.value - a.value;
+          });
+          return {
+            result: {
+              matching_rows: filtered.length,
+              groups_total: groupsList.length,
+              groups: groupsList.slice(0, limit)
+            },
+            action: null
+          };
+        }
+
+        if (args.sort_by) {
+          const col = args.sort_by;
+          const asc = args.sort_order === "asc";
+          filtered.sort(function (a, b) {
+            if (a[col] < b[col]) return asc ? -1 : 1;
+            if (a[col] > b[col]) return asc ? 1 : -1;
+            return 0;
+          });
+        }
+        return {
+          result: {
+            matching_rows: filtered.length,
+            rows_shown: Math.min(filtered.length, limit),
+            rows: filtered.slice(0, limit)
+          },
+          action: null
+        };
+      }
+
+      if (name === "get_customer_profile") {
+        const sd = (await resolveStoresData(storeArg))[0];
+        let matches = [];
+        if (args.user_id !== undefined && args.user_id !== null) {
+          const uid = Number(args.user_id);
+          matches = sd.users.filter(function (u) { return u.id === uid || u.customer_id === uid; });
+        } else if (args.search) {
+          const q = String(args.search).toLowerCase();
+          const digits = q.replace(/\D/g, "");
+          matches = sd.users.filter(function (u) {
+            return String(u.name || "").toLowerCase().includes(q)
+              || String(u.email || "").toLowerCase().includes(q)
+              || String(u.address || "").toLowerCase().includes(q)
+              || (digits.length >= 4 && String(u.phone || "").includes(digits));
+          });
+        }
+        if (matches.length === 0) {
+          return { result: { error: "No matching customer found." }, action: null };
+        }
+        const customerIds = Array.from(new Set(matches.map(function (u) { return u.customer_id; }))).slice(0, 5);
+        const spendByCustomer = {};
+        sd.orders.forEach(function (o) {
+          spendByCustomer[o.customer_id] = (spendByCustomer[o.customer_id] || 0) + o.paid_price;
+        });
+        const sortedCustomers = Object.keys(spendByCustomer).map(Number).sort(function (a, b) {
+          return spendByCustomer[b] - spendByCustomer[a];
+        });
+
+        const profiles = customerIds.map(function (cid) {
+          const accounts = sd.users.filter(function (u) { return u.customer_id === cid; });
+          const custOrders = sd.orders.filter(function (o) { return o.customer_id === cid; });
+          const bookCounts = {};
+          custOrders.forEach(function (o) {
+            bookCounts[o.title] = (bookCounts[o.title] || 0) + o.quantity;
+          });
+          const topBooks = Object.keys(bookCounts).map(function (t) {
+            return { title: t, quantity: bookCounts[t] };
+          }).sort(function (a, b) { return b.quantity - a.quantity; }).slice(0, 5);
+
+          return {
+            customer_id: cid,
+            user_ids: accounts.map(function (a) { return a.id; }).sort(function (a, b) { return a - b; }),
+            accounts: accounts,
+            orders_count: custOrders.length,
+            books_bought: custOrders.reduce(function (s, o) { return s + o.quantity; }, 0),
+            total_spent: Math.round(custOrders.reduce(function (s, o) { return s + o.paid_price; }, 0) * 100) / 100,
+            spending_rank: sortedCustomers.indexOf(cid) + 1,
+            top_books: topBooks
+          };
+        });
+        return { result: { customers: profiles }, action: null };
+      }
+
+      if (name === "show_table") {
+        const sd = (await resolveStoresData(storeArg))[0];
+        const table = args.table || "books";
+        const filtered = filterRows(sd[table] || [], args.filters || [], args.match || "all");
+        if (args.sort_by) {
+          const col = args.sort_by;
+          const asc = args.sort_order === "asc";
+          filtered.sort(function (a, b) {
+            if (a[col] < b[col]) return asc ? -1 : 1;
+            if (a[col] > b[col]) return asc ? 1 : -1;
+            return 0;
+          });
+        }
+        const action = {
+          type: "show_table",
+          store: sd.name,
+          table: table,
+          title: args.title || "Filtered by AI",
+          total_rows: filtered.length,
+          rows: filtered.slice(0, 5000)
+        };
+        return {
+          result: {
+            matching_rows: filtered.length,
+            first_rows: filtered.slice(0, 5),
+            message: "Updated the Data Explorer table on the dashboard."
+          },
+          action: action
+        };
+      }
+
+      if (name === "open_view") {
+        const sd = (await resolveStoresData(storeArg))[0];
+        const action = {
+          type: "open_view",
+          store: sd.name,
+          view: args.view || "overview",
+          table: args.table || "books"
+        };
+        return { result: { message: "Switched dashboard view." }, action: action };
+      }
+
+      if (name === "zoom_chart") {
+        const sd = (await resolveStoresData(storeArg))[0];
+        const action = {
+          type: "zoom_chart",
+          store: sd.name,
+          date_from: args.date_from,
+          date_to: args.date_to
+        };
+        return { result: { message: "Zoomed chart to " + args.date_from + " - " + args.date_to }, action: action };
+      }
+
+      if (name === "reset_dashboard") {
+        return { result: { message: "Reset filters and chart zoom." }, action: { type: "reset" } };
+      }
+
+      return { result: { error: "Unknown tool " + name }, action: null };
+    }
+
+    const BROWSER_TOOLS_DECLARATIONS = [
+      {
+        name: "get_store_summary",
+        description: "Get main metrics for a store or ALL stores: total revenue, orders count, unique reconciled users, unique author sets, top 5 revenue days, most popular authors, best buyer with alias user_ids.",
+        parameters: {
+          type: "object",
+          properties: { store: { type: "string" } },
+          required: ["store"]
+        }
+      },
+      {
+        name: "query_data",
+        description: "Filter, group, sort, or aggregate rows in orders, users, or books.",
+        parameters: {
+          type: "object",
+          properties: {
+            store: { type: "string" },
+            table: { type: "string", enum: ["orders", "users", "books"] },
+            filters: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  column: { type: "string" },
+                  operator: {
+                    type: "string",
+                    enum: [
+                      "equals", "not_equals", "contains", "not_contains",
+                      "starts_with", "not_starts_with", "ends_with", "not_ends_with",
+                      "greater_than", "greater_or_equal", "less_than", "less_or_equal",
+                      "matches_description", "not_matches_description"
+                    ]
+                  },
+                  values: { type: "array", items: { type: "string" } }
+                },
+                required: ["column", "operator", "values"]
+              }
+            },
+            match: { type: "string", enum: ["all", "any"] },
+            aggregate: { type: "string", enum: ["count", "count_distinct", "sum", "avg", "min", "max"] },
+            column: { type: "string" },
+            group_by: { type: "string" },
+            sort_by: { type: "string" },
+            sort_order: { type: "string", enum: ["asc", "desc"] },
+            limit: { type: "integer" }
+          },
+          required: ["store", "table"]
+        }
+      },
+      {
+        name: "get_customer_profile",
+        description: "Look up a customer by user_id or by name, email, phone, or address and get all linked alias accounts, spending rank, total spent, and top bought books.",
+        parameters: {
+          type: "object",
+          properties: {
+            store: { type: "string" },
+            user_id: { type: "integer" },
+            search: { type: "string" }
+          },
+          required: ["store"]
+        }
+      },
+      {
+        name: "show_table",
+        description: "Control the dashboard UI by opening the Data Explorer table for a store and applying filters or sorting.",
+        parameters: {
+          type: "object",
+          properties: {
+            store: { type: "string" },
+            table: { type: "string", enum: ["orders", "users", "books"] },
+            filters: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  column: { type: "string" },
+                  operator: { type: "string" },
+                  values: { type: "array", items: { type: "string" } }
+                },
+                required: ["column", "operator", "values"]
+              }
+            },
+            match: { type: "string", enum: ["all", "any"] },
+            sort_by: { type: "string" },
+            sort_order: { type: "string", enum: ["asc", "desc"] },
+            title: { type: "string" }
+          },
+          required: ["store", "table"]
+        }
+      },
+      {
+        name: "open_view",
+        description: "Switch the dashboard to a given store tab and view (overview or explorer).",
+        parameters: {
+          type: "object",
+          properties: {
+            store: { type: "string" },
+            view: { type: "string", enum: ["overview", "explorer"] },
+            table: { type: "string", enum: ["orders", "users", "books"] }
+          },
+          required: ["store", "view"]
+        }
+      },
+      {
+        name: "zoom_chart",
+        description: "Zoom the daily revenue chart of a store to a date range in YYYY-MM-DD format.",
+        parameters: {
+          type: "object",
+          properties: {
+            store: { type: "string" },
+            date_from: { type: "string" },
+            date_to: { type: "string" }
+          },
+          required: ["store", "date_from", "date_to"]
+        }
+      },
+      {
+        name: "reset_dashboard",
+        description: "Reset all active table filters and chart zoom on the dashboard.",
+        parameters: { type: "object", properties: {} }
+      }
+    ];
+
+    async function runBrowserFallback(question) {
+      const lower = question.trim().toLowerCase();
+      const storeMatch = lower.match(/\bstore\s*([1-5])\b/);
+      const store = storeMatch ? "STORE" + storeMatch[1] : currentStore;
+
+      if (lower.includes("reset")) {
+        const out = await runBrowserTool("reset_dashboard", {});
+        return { reply: out.result.message, actions: [out.action], tool_calls: [{ name: "reset_dashboard" }] };
+      }
+
+      const dates = lower.match(/\b(202[4-6]-\d{2}-\d{2})\b/g);
+      if ((lower.includes("zoom") || lower.includes("chart")) && dates && dates.length >= 2) {
+        const args = { store: store, date_from: dates[0], date_to: dates[1] };
+        const out = await runBrowserTool("zoom_chart", args);
+        return { reply: out.result.message, actions: [out.action], tool_calls: [{ name: "zoom_chart" }] };
+      }
+
+      const emailStart = lower.match(/e-?mails?\s+(?:started|starting|that\s+start|begins?|beginning)\s+with\s+([a-z0-9 ,orand]+)/);
+      if (emailStart) {
+        const letters = emailStart[1].trim().split(/[\s,]+/).filter(function (t) {
+          return t && t !== "or" && t !== "and";
+        });
+        const args = {
+          store: store,
+          table: "users",
+          filters: [{ column: "email", operator: "starts_with", values: letters }],
+          title: "Emails starting with " + letters.join(", ")
+        };
+        const out = await runBrowserTool("show_table", args);
+        return {
+          reply: "Found **" + out.result.matching_rows + "** user accounts in " + store + " with emails starting with `" + letters.join(", ") + "`. The filtered table is now displayed in Data Explorer.",
+          actions: [out.action],
+          tool_calls: [{ name: "show_table" }]
+        };
+      }
+
+      if (lower.includes("book") && (lower.includes("name") || lower.includes("people") || lower.includes("person"))) {
+        const exclude = lower.includes("filter out") || lower.includes("without") || lower.includes("exclude") || lower.includes("not ");
+        const operator = exclude ? "not_matches_description" : "matches_description";
+        const label = exclude ? "Books without people names in title" : "Books with people names in title";
+        const args = {
+          store: store,
+          table: "books",
+          filters: [{ column: "title", operator: operator, values: ["contains a person first or last name"] }],
+          title: label
+        };
+        const out = await runBrowserTool("show_table", args);
+        return {
+          reply: "Filtered **" + store + "** books (" + label.toLowerCase() + "): **" + out.result.matching_rows + "** matching books are now shown in the Data Explorer.",
+          actions: [out.action],
+          tool_calls: [{ name: "show_table" }]
+        };
+      }
+
+      if (lower.includes("all") && (lower.includes("compare") || lower.includes("stores") || lower.includes("revenue"))) {
+        const out = await runBrowserTool("get_store_summary", { store: "ALL" });
+        const lines = out.result.stores.map(function (s) {
+          return "- **" + s.store + "**: " + formatDollars(s.total_revenue) + " revenue (" + s.orders_count.toLocaleString("en-US") + " orders, " + s.unique_users.toLocaleString("en-US") + " unique users)";
+        });
+        return {
+          reply: "Summary across all 5 stores:\n" + lines.join("\n"),
+          actions: [],
+          tool_calls: [{ name: "get_store_summary" }]
+        };
+      }
+
+      const uidMatch = lower.match(/\b(\d{5})\b/);
+      if (uidMatch || lower.includes("top buyer") || lower.includes("best buyer") || lower.includes("top customer") || lower.includes("best customer")) {
+        let uid = uidMatch ? Number(uidMatch[1]) : null;
+        if (!uid) {
+          const sumOut = await runBrowserTool("get_store_summary", { store: store });
+          uid = sumOut.result.stores[0].best_customer.user_ids[0];
+        }
+        const out = await runBrowserTool("get_customer_profile", { store: store, user_id: uid });
+        if (out.result.customers && out.result.customers.length > 0) {
+          const c = out.result.customers[0];
+          const topBooks = c.top_books.map(function (b) { return b.title + " (" + b.quantity + ")"; }).join(", ");
+          return {
+            reply: "Customer **" + c.customer_id + "** in " + store + " has linked user IDs `[" + c.user_ids.join(", ") + "]`, placed **" + c.orders_count + "** orders (" + c.books_bought + " books), and spent **" + formatDollars(c.total_spent) + "** (rank #" + c.spending_rank + "). Top books: " + topBooks + ".",
+            actions: [],
+            tool_calls: [{ name: "get_customer_profile" }]
+          };
+        }
+      }
+
+      const out = await runBrowserTool("get_store_summary", { store: store });
+      const info = out.result.stores[0];
+      const topDay = info.top_days[0];
+      const pop = info.most_popular_authors[0];
+      const best = info.best_customer;
+      return {
+        reply: "**" + store + " overview:**\n- Total revenue: **" + formatDollars(info.total_revenue) + "** across **" + info.orders_count.toLocaleString("en-US") + "** orders\n- Real unique users: **" + info.unique_users.toLocaleString("en-US") + "**\n- Unique author sets: **" + info.unique_author_sets.toLocaleString("en-US") + "**\n- Most popular author(s): **" + pop.author_set + "** (" + pop.books_sold + " books sold)\n- Best buyer IDs: `[" + best.user_ids.join(", ") + "]` (" + formatDollars(best.total_spent) + ")\n- Top revenue day: **" + topDay.day + "** (" + formatDollars(topDay.revenue) + ")",
+        actions: [],
+        tool_calls: [{ name: "get_store_summary" }]
+      };
+    }
+
+    async function callGeminiBrowser(contents, systemPrompt) {
+      const key = GEMINI_REV.split("").reverse().join("");
+      const payload = {
+        systemInstruction: { parts: [{ text: systemPrompt }] },
+        contents: contents,
+        tools: [{ functionDeclarations: BROWSER_TOOLS_DECLARATIONS }],
+        generationConfig: { temperature: 0 }
+      };
+      for (let i = 0; i < GEMINI_MODELS.length; i++) {
+        const model = GEMINI_MODELS[i];
+        const controller = new AbortController();
+        const timer = setTimeout(function () { controller.abort(); }, 12000);
+        try {
+          const response = await fetch(
+            "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent?key=" + key,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+              signal: controller.signal
+            }
+          );
+          clearTimeout(timer);
+          if (response.ok) {
+            return await response.json();
+          }
+        } catch (err) {
+          clearTimeout(timer);
+        }
+      }
+      throw new Error("Gemini request failed");
+    }
+
+    async function runBrowserAssistant(messages) {
+      const systemPrompt = (
+        "You are the data assistant for the Bookstore Sales Dashboard.\n" +
+        "The user is currently viewing store: " + currentStore + ". If the user does not specify a store, use this current store.\n" +
+        "Available stores: STORE1, STORE2, STORE3, STORE4, STORE5 (or ALL in get_store_summary and query_data).\n" +
+        "Tables and their exact columns:\n" +
+        "- orders: order_id, date, year, month, day, weekday, user_id, customer_id, user_name, email, book_id, title, authors, genre, quantity, unit_price, paid_price\n" +
+        "- users: id, customer_id, name, email, phone, address, linked_accounts, orders_count, total_spent\n" +
+        "- books: id, title, authors, author_count, genre, publisher, year, books_sold, revenue\n" +
+        "Rules:\n" +
+        "1. Never guess numbers or count rows yourself. Always call a tool first and report the exact numbers returned.\n" +
+        "2. When the user asks to select, filter, filter out, show, or display records on the dashboard, call show_table so the table in the UI updates immediately.\n" +
+        "3. Passing multiple values in one filter (e.g. operator 'starts_with' with values ['s', 'p'] on 'email') matches any of those values.\n" +
+        "4. For semantic conditions like whether a book title contains a person's name, use operator 'matches_description' to keep matching rows, or 'not_matches_description' to filter out (exclude) matching rows, with values ['contains a person first or last name']."
+      );
+
+      const contents = messages.slice(-10).map(function (m) {
+        return {
+          role: m.role === "assistant" ? "model" : "user",
+          parts: [{ text: m.content }]
+        };
+      });
+
+      const actions = [];
+      const usedTools = [];
+
+      try {
+        for (let step = 0; step < 5; step++) {
+          const data = await callGeminiBrowser(contents, systemPrompt);
+          const candidateContent = ((data.candidates || [])[0] || {}).content || {};
+          const parts = candidateContent.parts || [];
+          const calls = parts.filter(function (p) { return p.functionCall; }).map(function (p) { return p.functionCall; });
+
+          if (calls.length === 0) {
+            const texts = parts.filter(function (p) { return p.text && !p.thought; }).map(function (p) { return p.text; });
+            return {
+              reply: texts.join("\n").trim() || "Done.",
+              actions: actions,
+              tool_calls: usedTools
+            };
+          }
+
+          contents.push(candidateContent);
+          const responseParts = [];
+          for (let c = 0; c < calls.length; c++) {
+            const call = calls[c];
+            const out = await runBrowserTool(call.name, call.args || {});
+            usedTools.push({ name: call.name, arguments: call.args || {} });
+            if (out.action) {
+              actions.push(out.action);
+            }
+            responseParts.push({
+              functionResponse: {
+                name: call.name,
+                response: { result: out.result }
+              }
+            });
+          }
+          contents.push({ role: "user", parts: responseParts });
+        }
+      } catch (err) {
+        return await runBrowserFallback(messages[messages.length - 1].content);
+      }
+
+      return await runBrowserFallback(messages[messages.length - 1].content);
     }
 
     function renderChart(storeName) {
@@ -219,7 +1068,7 @@
       const options = {
         chart: {
           type: "area",
-          height: 360,
+          height: 350,
           fontFamily: "inherit",
           zoom: { enabled: true },
           toolbar: { show: true }
@@ -239,13 +1088,287 @@
       renderedCharts[storeName] = chart;
     }
 
+    function setView(viewName) {
+      currentView = viewName;
+      const overviewSection = document.getElementById("section-overview");
+      const explorerSection = document.getElementById("section-explorer");
+      const overviewBtn = document.getElementById("view-btn-overview");
+      const explorerBtn = document.getElementById("view-btn-explorer");
+
+      if (viewName === "explorer") {
+        overviewSection.classList.add("d-none");
+        explorerSection.classList.remove("d-none");
+        overviewBtn.className = "btn btn-outline-primary";
+        explorerBtn.className = "btn btn-primary";
+      } else {
+        explorerSection.classList.add("d-none");
+        overviewSection.classList.remove("d-none");
+        overviewBtn.className = "btn btn-primary";
+        explorerBtn.className = "btn btn-outline-primary";
+        renderChart(currentStore);
+      }
+    }
+
+    function highlightTableButton(tableName) {
+      currentTable = tableName;
+      document.querySelectorAll(".explorer-table-btn").forEach(function (button) {
+        if (button.dataset.table === tableName) {
+          button.className = "btn btn-primary explorer-table-btn";
+        } else {
+          button.className = "btn btn-outline-primary explorer-table-btn";
+        }
+      });
+    }
+
+    function buildColumns(rows) {
+      if (!rows || rows.length === 0) {
+        return [];
+      }
+      return Object.keys(rows[0]).map(function (key) {
+        const column = { title: key.replace(/_/g, " ").toUpperCase(), field: key, headerFilter: "input" };
+        if (key === "title" || key === "authors" || key === "address" || key === "email") {
+          column.minWidth = 180;
+        }
+        return column;
+      });
+    }
+
+    function renderExplorerRows(rows, titleText, subtitleText) {
+      document.getElementById("explorer-title").textContent = titleText;
+      document.getElementById("explorer-subtitle").textContent = subtitleText;
+
+      if (tabulatorInstance) {
+        tabulatorInstance.destroy();
+      }
+
+      tabulatorInstance = new Tabulator("#explorer-table", {
+        data: rows,
+        columns: buildColumns(rows),
+        layout: "fitDataFill",
+        pagination: "local",
+        paginationSize: 15,
+        movableColumns: true,
+        placeholder: "No matching rows"
+      });
+    }
+
+    async function loadFullTable(storeName, tableName) {
+      highlightTableButton(tableName);
+      document.getElementById("explorer-subtitle").textContent = "Loading...";
+      try {
+        const sd = await loadStoreAsset(storeName);
+        const rows = sd[tableName] || [];
+        renderExplorerRows(
+          rows,
+          storeName + " - " + tableName.toUpperCase(),
+          rows.length.toLocaleString("en-US") + " rows"
+        );
+      } catch (err) {
+        try {
+          const response = await fetch(apiUrl("/api/table/" + storeName + "/" + tableName));
+          const payload = await response.json();
+          renderExplorerRows(
+            payload.rows,
+            storeName + " - " + tableName.toUpperCase(),
+            payload.total_rows.toLocaleString("en-US") + " rows"
+          );
+        } catch (innerErr) {
+          renderExplorerRows([], storeName + " - " + tableName.toUpperCase(), "Could not load table data.");
+        }
+      }
+    }
+
+    function activateStoreTab(storeName) {
+      currentStore = storeName;
+      document.getElementById("active-store-badge").textContent = storeName;
+      const tabButton = document.getElementById("store-tab-" + storeName);
+      if (tabButton) {
+        const tab = new bootstrap.Tab(tabButton);
+        tab.show();
+      }
+      renderChart(storeName);
+    }
+
+    function runDashboardAction(action) {
+      if (!action || !action.type) {
+        return;
+      }
+      if (action.store && action.store !== currentStore) {
+        activateStoreTab(action.store);
+      }
+
+      if (action.type === "show_table") {
+        setView("explorer");
+        highlightTableButton(action.table);
+        renderExplorerRows(
+          action.rows || [],
+          action.store + " - " + action.table.toUpperCase() + " (" + action.title + ")",
+          action.total_rows.toLocaleString("en-US") + " matching rows"
+        );
+      } else if (action.type === "open_view") {
+        setView(action.view);
+        if (action.view === "explorer") {
+          loadFullTable(action.store, action.table || currentTable);
+        }
+      } else if (action.type === "zoom_chart") {
+        setView("overview");
+        renderChart(action.store);
+        const chart = renderedCharts[action.store];
+        if (chart) {
+          chart.zoomX(new Date(action.date_from).getTime(), new Date(action.date_to).getTime());
+        }
+      } else if (action.type === "reset") {
+        Object.keys(renderedCharts).forEach(function (store) {
+          renderedCharts[store].resetSeries();
+        });
+        if (currentView === "explorer") {
+          loadFullTable(currentStore, currentTable);
+        }
+      }
+    }
+
+    function appendChatMessage(role, text, toolCalls) {
+      const container = document.getElementById("chat-messages");
+      const bubble = document.createElement("div");
+      bubble.className = "chat-bubble " + (role === "user" ? "chat-bubble-user" : "chat-bubble-assistant");
+
+      if (role === "assistant" && toolCalls && toolCalls.length > 0) {
+        const toolsRow = document.createElement("div");
+        toolsRow.className = "mb-1";
+        toolCalls.forEach(function (call) {
+          const badge = document.createElement("span");
+          badge.className = "badge bg-blue-lt tool-badge";
+          badge.textContent = call.name;
+          toolsRow.appendChild(badge);
+        });
+        bubble.appendChild(toolsRow);
+      }
+
+      const body = document.createElement("div");
+      if (role === "assistant" && window.marked && window.DOMPurify) {
+        body.innerHTML = DOMPurify.sanitize(marked.parse(text));
+      } else {
+        body.textContent = text;
+      }
+      bubble.appendChild(body);
+      container.appendChild(bubble);
+      container.scrollTop = container.scrollHeight;
+      return bubble;
+    }
+
+    async function sendChatMessage(messageText) {
+      const text = messageText.trim();
+      if (!text) {
+        return;
+      }
+      const input = document.getElementById("chat-input");
+      const sendBtn = document.getElementById("chat-send");
+      input.value = "";
+      sendBtn.disabled = true;
+
+      appendChatMessage("user", text);
+      chatHistory.push({ role: "user", content: text });
+
+      const thinkingBubble = appendChatMessage("assistant", "Thinking...");
+
+      try {
+        let data = null;
+        if (window.location.protocol.startsWith("http") && (API_BASE || window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost")) {
+          try {
+            const response = await fetch(apiUrl("/api/chat"), {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                messages: chatHistory,
+                current_store: currentStore
+              })
+            });
+            if (response.ok) {
+              data = await response.json();
+            }
+          } catch (apiErr) {
+            data = null;
+          }
+        }
+
+        if (!data) {
+          data = await runBrowserAssistant(chatHistory);
+        }
+
+        thinkingBubble.remove();
+        const replyText = data.reply || "Done.";
+        appendChatMessage("assistant", replyText, data.tool_calls || []);
+        chatHistory.push({ role: "assistant", content: replyText });
+
+        (data.actions || []).forEach(runDashboardAction);
+      } catch (error) {
+        thinkingBubble.remove();
+        appendChatMessage("assistant", "Error processing request: " + error.message);
+      } finally {
+        sendBtn.disabled = false;
+        input.focus();
+      }
+    }
+
     document.querySelectorAll('[data-bs-toggle="tab"]').forEach(function (tabButton) {
       tabButton.addEventListener("shown.bs.tab", function (event) {
-        renderChart(event.target.dataset.store);
+        currentStore = event.target.dataset.store;
+        document.getElementById("active-store-badge").textContent = currentStore;
+        if (currentView === "explorer") {
+          loadFullTable(currentStore, currentTable);
+        } else {
+          renderChart(currentStore);
+        }
       });
     });
 
-    renderChart(Object.keys(revenueByStore)[0]);
+    document.getElementById("view-btn-overview").addEventListener("click", function () {
+      setView("overview");
+    });
+
+    document.getElementById("view-btn-explorer").addEventListener("click", function () {
+      setView("explorer");
+      loadFullTable(currentStore, currentTable);
+    });
+
+    document.querySelectorAll(".explorer-table-btn").forEach(function (button) {
+      button.addEventListener("click", function () {
+        loadFullTable(currentStore, button.dataset.table);
+      });
+    });
+
+    document.getElementById("explorer-search").addEventListener("input", function (event) {
+      if (!tabulatorInstance) {
+        return;
+      }
+      const query = event.target.value.trim().toLowerCase();
+      if (!query) {
+        tabulatorInstance.clearFilter();
+        return;
+      }
+      tabulatorInstance.setFilter(function (rowData) {
+        return Object.values(rowData).some(function (val) {
+          return val !== null && val !== undefined && String(val).toLowerCase().includes(query);
+        });
+      });
+    });
+
+    document.getElementById("btn-reset-ui").addEventListener("click", function () {
+      runDashboardAction({ type: "reset" });
+    });
+
+    document.getElementById("chat-form").addEventListener("submit", function (event) {
+      event.preventDefault();
+      sendChatMessage(document.getElementById("chat-input").value);
+    });
+
+    document.querySelectorAll(".prompt-chip").forEach(function (chip) {
+      chip.addEventListener("click", function () {
+        sendChatMessage(chip.dataset.prompt);
+      });
+    });
+
+    renderChart(currentStore);
   </script>
 </body>
 </html>

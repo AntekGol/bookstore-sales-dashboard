@@ -1,16 +1,20 @@
 import json
+import os
 from pathlib import Path
 
-from analysis import analyze_store
+from dotenv import load_dotenv
+
 from charts import save_daily_revenue_chart
-from cleaning import load_books, load_orders, load_users
-from customers import assign_customer_ids
 from dashboard import build_dashboard
+from store_data import load_store
+from tools import frame_to_records
 
 PROJECT_DIR = Path(__file__).resolve().parent
 DATA_DIR = PROJECT_DIR / "data"
 OUTPUT_DIR = PROJECT_DIR / "output"
-DASHBOARD_PATH = PROJECT_DIR / "docs" / "index.html"
+DOCS_DIR = PROJECT_DIR / "docs"
+ASSETS_DIR = DOCS_DIR / "assets"
+DASHBOARD_PATH = DOCS_DIR / "index.html"
 
 
 def print_summary(results):
@@ -26,24 +30,43 @@ def print_summary(results):
     print()
 
 
+def save_store_asset(store):
+    ASSETS_DIR.mkdir(parents=True, exist_ok=True)
+    order_columns = ["order_id", "date", "user_id", "book_id", "quantity", "unit_price", "paid_price"]
+    orders_rows = [
+        [
+            row["order_id"],
+            row["date"],
+            row["user_id"],
+            row["book_id"],
+            row["quantity"],
+            row["unit_price"],
+            row["paid_price"],
+        ]
+        for row in frame_to_records(store.orders[order_columns])
+    ]
+    payload = {
+        "books": frame_to_records(store.books),
+        "users": frame_to_records(store.users),
+        "orders": orders_rows,
+    }
+    asset_path = ASSETS_DIR / f"{store.name}.json"
+    asset_path.write_text(json.dumps(payload, separators=(",", ":")), encoding="utf-8")
+
+
 def process_store(store_path):
-    print(store_path.name)
+    store = load_store(store_path)
 
-    orders = load_orders(store_path)
-    users = assign_customer_ids(load_users(store_path))
-    books = load_books(store_path)
+    chart_path = OUTPUT_DIR / store.name / "daily_revenue.png"
+    save_daily_revenue_chart(store.summary["daily_revenue"], store.name, chart_path)
+    save_store_asset(store)
 
-    results = {"store": store_path.name}
-    results.update(analyze_store(orders, users, books))
-
-    chart_path = OUTPUT_DIR / store_path.name / "daily_revenue.png"
-    save_daily_revenue_chart(results["daily_revenue"], store_path.name, chart_path)
-
-    print_summary(results)
-    return results
+    print_summary(store.summary)
+    return store.summary
 
 
 def main():
+    load_dotenv(PROJECT_DIR / ".env")
     store_paths = sorted(path for path in DATA_DIR.iterdir() if path.is_dir())
 
     all_results = []
@@ -54,7 +77,8 @@ def main():
     with open(OUTPUT_DIR / "results.json", "w", encoding="utf-8") as file:
         json.dump(all_results, file, indent=2)
 
-    build_dashboard(all_results, DASHBOARD_PATH)
+    api_url = os.getenv("DASHBOARD_API_URL", "")
+    build_dashboard(all_results, DASHBOARD_PATH, api_url)
     print(f"dashboard saved to {DASHBOARD_PATH}")
 
 
